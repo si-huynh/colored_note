@@ -67,6 +67,18 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_web_plugins:
+    dependency: transitive
+    description: flutter
+    source: sdk
+    version: "0.0.0"
+  folder_list:
+    dependency: "direct main"
+    description:
+      path: "packages/features/folder_list"
+      relative: true
+    source: path
+    version: "0.0.1"
   js:
     dependency: transitive
     description:
@@ -107,6 +119,20 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.9.1"
+  note_compose:
+    dependency: "direct main"
+    description:
+      path: "packages/features/note_compose"
+      relative: true
+    source: path
+    version: "0.0.1"
+  note_list:
+    dependency: "direct main"
+    description:
+      path: "packages/features/note_list"
+      relative: true
+    source: path
+    version: "0.0.1"
   path:
     dependency: transitive
     description:
@@ -115,6 +141,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.8.3"
+  routemaster:
+    dependency: "direct main"
+    description:
+      name: routemaster
+      sha256: b3b10b6ee31c741b453091e6b33323cc96631b19e4a14fc6069e9de056c7311c
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -178,3 +212,4 @@ packages:
     version: "2.1.4"
 sdks:
   dart: ">=3.0.6 <4.0.0"
+  flutter: ">=1.17.0"

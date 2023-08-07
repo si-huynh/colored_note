@@ -1,19 +1,26 @@
 name: colored_note
 description: A new Flutter project.
-publish_to: 'none'
+publish_to: "none"
 version: 0.1.0
 
 environment:
-  sdk: '>=3.0.6 <4.0.0'
+    sdk: ">=3.0.6 <4.0.0"
 
 dependencies:
-  flutter:
-    sdk: flutter
+    flutter:
+        sdk: flutter
+    routemaster: ^1.0.1
+    folder_list:
+        path: packages/features/folder_list
+    note_list:
+        path: packages/features/note_list
+    note_compose:
+        path: packages/features/note_compose
 
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
-  flutter_lints: ^2.0.0
+    flutter_test:
+        sdk: flutter
+    flutter_lints: ^2.0.0
 
 flutter:
-  uses-material-design: true
+    uses-material-design: true
