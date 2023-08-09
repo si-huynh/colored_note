@@ -1,5 +1,5 @@
 /*
- * Created By: Sĩ Huỳnh on Sunday, August 6th 2023, 7:33:36 pm
+ * Created By: Sĩ Huỳnh on Wednesday, August 9th 2023, 11:12:15 am
  * 
  * Copyright (c) 2023 Si Huynh
  * 
@@ -29,5 +29,39 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
  */
-export 'src/folder_list_screen.dart';
-export 'src/l10n/folder_list_localizations.dart';
+import 'package:domain_models/domain_models.dart';
+import 'package:flutter/material.dart';
+
+class FolderListItemView extends StatelessWidget {
+  const FolderListItemView({super.key, required this.folder, this.onItemSelected});
+
+  final Folder folder;
+  final Function(String name)? onItemSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        side: BorderSide(
+          color: Theme.of(context).colorScheme.outline,
+        ),
+        borderRadius: const BorderRadius.all(
+          Radius.circular(12),
+        ),
+      ),
+      child: ListTile(
+        title: Text(folder.name),
+        leading: const Icon(Icons.folder),
+        trailing: const Icon(Icons.chevron_right),
+        visualDensity: VisualDensity.compact,
+        onTap: () => {onItemSelected?.call(folder.name)},
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(12),
+          ),
+        ),
+      ),
+    );
+  }
+}

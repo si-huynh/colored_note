@@ -1,5 +1,5 @@
 /*
- * Created By: Sĩ Huỳnh on Sunday, August 6th 2023, 7:33:36 pm
+ * Created By: Sĩ Huỳnh on Monday, August 7th 2023, 11:35:10 am
  * 
  * Copyright (c) 2023 Si Huynh
  * 
@@ -29,5 +29,44 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
  */
-export 'src/folder_list_screen.dart';
-export 'src/l10n/folder_list_localizations.dart';
+import 'package:flutter/foundation.dart';
+import 'package:hive/hive.dart';
+import 'package:key_value_storage/src/models/models.dart';
+import 'package:path_provider/path_provider.dart';
+
+class KeyValueStorage {
+  static const _folderBoxKey = 'folder';
+  static const _noteBoxKey = 'note';
+
+  final HiveInterface _hive;
+
+  KeyValueStorage({
+    @visibleForTesting HiveInterface? hive,
+  }) : _hive = hive ?? Hive {
+    try {
+      _hive
+        ..registerAdapter(FolderCMAdapter())
+        ..registerAdapter(NoteCMAdapter());
+    } catch (_) {
+      throw Exception(
+          'You shouldn\'t have more than one [KeyValueStorage] instance in your project');
+    }
+  }
+
+  Future<Box<FolderCM>> get folderBox => _openHiveBox(_folderBoxKey, isTemporary: true);
+
+  Future<Box<NoteCM>> get noteBox => _openHiveBox(_noteBoxKey, isTemporary: true);
+
+  Future<Box<T>> _openHiveBox<T>(String boxKey, {required bool isTemporary}) async {
+    if (_hive.isBoxOpen(boxKey)) {
+      return _hive.openBox(boxKey);
+    } else {
+      final directory =
+          await (isTemporary ? getTemporaryDirectory() : getApplicationDocumentsDirectory());
+      return _hive.openBox(
+        boxKey,
+        path: directory.path,
+      );
+    }
+  }
+}

@@ -32,21 +32,28 @@
 
 import 'package:flutter/material.dart';
 import 'package:folder_list/folder_list.dart';
+import 'package:folder_repository/folder_repository.dart';
 import 'package:note_compose/note_compose.dart';
 import 'package:note_list/note_list.dart';
 import 'package:routemaster/routemaster.dart';
 
 Map<String, PageBuilder> buildRoutingTable({
   required RoutemasterDelegate routerDelegate,
+  required FolderRepository folderRepository,
 }) {
   return {
     _PathConstants.folderListPath: (route) {
-      return const MaterialPage(
+      return MaterialPage(
         name: 'folder-list',
-        child: FolderListScreen(),
+        child: FolderListScreen(
+          folderRepository: folderRepository,
+          folderItemSelected: (name) {
+            routerDelegate.push(_PathConstants.noteList(folder: name));
+          },
+        ),
       );
     },
-    _PathConstants.noteListPath: (route) {
+    _PathConstants.noteList(): (route) {
       return MaterialPage(
         name: 'note-list',
         child: NoteListScreen(
@@ -70,9 +77,10 @@ class _PathConstants {
 
   static String get folderListPath => '/';
 
-  static String get noteListPath => '/notes';
+  static String noteList({String folder = 'All'}) => '/$folder';
 
   static String get idPathParameter => 'id';
 
-  static String noteComposePath({int? noteId}) => '/note-compose/${noteId ?? ':$idPathParameter'}';
+  static String noteComposePath({String folder = 'All', int? noteId}) =>
+      '/$folder/compose/${noteId ?? ':$idPathParameter'}';
 }

@@ -1,5 +1,5 @@
 /*
- * Created By: Sĩ Huỳnh on Sunday, August 6th 2023, 7:33:36 pm
+ * Created By: Sĩ Huỳnh on Monday, August 7th 2023, 11:36:51 am
  * 
  * Copyright (c) 2023 Si Huynh
  * 
@@ -29,5 +29,17 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
  */
-export 'src/folder_list_screen.dart';
-export 'src/l10n/folder_list_localizations.dart';
+import 'package:hive/hive.dart';
+
+part 'folder_cm.g.dart';
+
+@HiveType(typeId: 1)
+class FolderCM {
+  const FolderCM({required this.id, required this.name});
+
+  @HiveField(0)
+  final String id;
+
+  @HiveField(1)
+  final String name;
+}

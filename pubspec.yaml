@@ -9,9 +9,15 @@ environment:
 dependencies:
     flutter:
         sdk: flutter
+    flutter_localizations:
+        sdk: flutter
     routemaster: ^1.0.1
     folder_list:
         path: packages/features/folder_list
+    folder_repository:
+        path: packages/folder_repository
+    key_value_storage:
+        path: packages/key_value_storage
     note_list:
         path: packages/features/note_list
     note_compose:

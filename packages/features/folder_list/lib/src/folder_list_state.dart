@@ -1,5 +1,5 @@
 /*
- * Created By: Sĩ Huỳnh on Sunday, August 6th 2023, 7:33:36 pm
+ * Created By: Sĩ Huỳnh on Monday, August 7th 2023, 3:45:35 pm
  * 
  * Copyright (c) 2023 Si Huynh
  * 
@@ -29,5 +29,32 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
  */
-export 'src/folder_list_screen.dart';
-export 'src/l10n/folder_list_localizations.dart';
+import 'package:domain_models/domain_models.dart';
+import 'package:equatable/equatable.dart';
+
+abstract class FolderListState extends Equatable {
+  const FolderListState();
+}
+
+class FolderListInProgress extends FolderListState {
+  const FolderListInProgress();
+
+  @override
+  List<Object?> get props => [];
+}
+
+class FolderListSuccess extends FolderListState {
+  const FolderListSuccess({this.folderList = const []});
+
+  final List<Folder> folderList;
+
+  @override
+  List<Object?> get props => [];
+}
+
+class FolderListStateFailure extends FolderListState {
+  const FolderListStateFailure();
+
+  @override
+  List<Object?> get props => [];
+}

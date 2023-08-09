@@ -29,120 +29,31 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
  */
-import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:folder_list/src/folder_cubit.dart';
+import 'package:folder_list/src/folder_list_view.dart' show FolderListView, FolderItemSelected;
+import 'package:folder_repository/folder_repository.dart';
 
-class FolderListScreen extends StatefulWidget {
-  const FolderListScreen({super.key});
+class FolderListScreen extends StatelessWidget {
+  const FolderListScreen({
+    super.key,
+    required this.folderRepository,
+    FolderItemSelected? folderItemSelected,
+  }) : _folderItemSelected = folderItemSelected;
 
-  @override
-  State<FolderListScreen> createState() => _FolderListScreenState();
-}
+  final FolderRepository folderRepository;
+  final FolderItemSelected? _folderItemSelected;
 
-class _FolderListScreenState extends State<FolderListScreen> {
   @override
   Widget build(BuildContext context) {
-    return Material(
-      child: CustomScrollView(
-        slivers: [
-          SliverAppBar.large(
-            leading: IconButton(
-              icon: const Icon(Icons.create_new_folder_outlined),
-              onPressed: _onNewFolderButtonPress,
-            ),
-            title: const Text('Folders'),
-            actions: <Widget>[
-              IconButton(
-                icon: const Icon(Icons.cloud_off_outlined),
-                onPressed: () {},
-              ),
-            ],
-          ),
-          SliverToBoxAdapter(
-            child: Card(
-              child: SizedBox(
-                height: 1200,
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(8, 16, 8, 16),
-                  child: Column(
-                    children: [
-                      Card(
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                          side: BorderSide(
-                            color: Theme.of(context).colorScheme.outline,
-                          ),
-                          borderRadius: const BorderRadius.all(Radius.circular(12)),
-                        ),
-                        child: const ListTile(
-                          title: Text('One-line ListTile'),
-                        ),
-                      ),
-                      Card(
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                          side: BorderSide(
-                            color: Theme.of(context).colorScheme.outline,
-                          ),
-                          borderRadius: const BorderRadius.all(Radius.circular(12)),
-                        ),
-                        child: const ListTile(
-                          leading: Icon(Icons.folder),
-                          title: Text('One-line with leading widget'),
-                        ),
-                      ),
-                      Card(
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                          side: BorderSide(
-                            color: Theme.of(context).colorScheme.outline,
-                          ),
-                          borderRadius: const BorderRadius.all(Radius.circular(12)),
-                        ),
-                        child: const ListTile(
-                          title: Text('One-line with trailing widget'),
-                          trailing: Icon(Icons.more_vert),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
+    return BlocProvider(
+      create: (_) => FolderListCubit(
+        folderRepository: folderRepository,
+      ),
+      child: FolderListView(
+        folderItemSelected: _folderItemSelected,
       ),
     );
-  }
-
-  _onNewFolderButtonPress() {
-    addNewFolderdialog(context).then((value) => log(value ?? "none"));
-  }
-
-  Future<String?> addNewFolderdialog(BuildContext context) async {
-    return showDialog<String>(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: const Text("Create new folder"),
-            content: TextField(
-              onChanged: (value) {},
-            ),
-            actions: [
-              MaterialButton(
-                onPressed: () {
-                  Navigator.pop(context, 'Done');
-                },
-                child: const Text('Done'),
-              ),
-              MaterialButton(
-                onPressed: () {
-                  Navigator.pop(context, 'Cancle');
-                },
-                child: const Text('Cancle'),
-              ),
-            ],
-          );
-        });
   }
 }

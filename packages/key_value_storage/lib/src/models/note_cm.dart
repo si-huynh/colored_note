@@ -1,5 +1,5 @@
 /*
- * Created By: Sĩ Huỳnh on Monday, August 7th 2023, 10:02:27 am
+ * Created By: Sĩ Huỳnh on Monday, August 7th 2023, 11:39:54 am
  * 
  * Copyright (c) 2023 Si Huynh
  * 
@@ -29,3 +29,21 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
  */
+
+import 'package:hive/hive.dart';
+
+part 'note_cm.g.dart';
+
+@HiveType(typeId: 0)
+class NoteCM {
+  const NoteCM({required this.id, required this.title, required this.body});
+
+  @HiveField(0)
+  final String id;
+
+  @HiveField(1)
+  final String title;
+
+  @HiveField(2)
+  final String body;
+}

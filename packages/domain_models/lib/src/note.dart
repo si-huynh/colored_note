@@ -1,5 +1,5 @@
 /*
- * Created By: Sĩ Huỳnh on Sunday, August 6th 2023, 7:33:36 pm
+ * Created By: Sĩ Huỳnh on Monday, August 7th 2023, 12:58:17 pm
  * 
  * Copyright (c) 2023 Si Huynh
  * 
@@ -29,5 +29,19 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
  */
-export 'src/folder_list_screen.dart';
-export 'src/l10n/folder_list_localizations.dart';
+import 'package:equatable/equatable.dart';
+
+class Note extends Equatable {
+  const Note({
+    required this.id,
+    required this.title,
+    required this.body,
+  });
+
+  final String id;
+  final String body;
+  final String title;
+
+  @override
+  List<Object?> get props => [id];
+}

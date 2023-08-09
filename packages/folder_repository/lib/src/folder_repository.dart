@@ -1,5 +1,5 @@
 /*
- * Created By: Sĩ Huỳnh on Sunday, August 6th 2023, 7:33:36 pm
+ * Created By: Sĩ Huỳnh on Monday, August 7th 2023, 1:28:06 pm
  * 
  * Copyright (c) 2023 Si Huynh
  * 
@@ -29,5 +29,30 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
  */
-export 'src/folder_list_screen.dart';
-export 'src/l10n/folder_list_localizations.dart';
+import 'package:domain_models/domain_models.dart';
+import 'package:flutter/foundation.dart';
+import 'package:folder_repository/src/folder_local_storage.dart';
+import 'package:folder_repository/src/mappers/cache_to_domain.dart';
+import 'package:key_value_storage/key_value_storage.dart';
+
+class FolderRepository {
+  final FolderLocalStorage _localStorage;
+
+  FolderRepository({
+    required KeyValueStorage keyValueStorage,
+    @visibleForTesting FolderLocalStorage? localStorage,
+  }) : _localStorage = localStorage ?? FolderLocalStorage(keyValueStorage: keyValueStorage);
+
+  Future<void> upsertFolder(String name) async {
+    return await _localStorage.upsertFolder(name);
+  }
+
+  Future<void> deleteFolder(String name) async {
+    return await _localStorage.deleteFolder(name);
+  }
+
+  Future<List<Folder>> getAllFolders() async {
+    final folders = await _localStorage.getAllFolders();
+    return folders.map((folder) => folder.toDomainModel()).toList();
+  }
+}

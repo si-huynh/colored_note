@@ -1,5 +1,5 @@
 /*
- * Created By: Sĩ Huỳnh on Sunday, August 6th 2023, 7:33:36 pm
+ * Created By: Sĩ Huỳnh on Monday, August 7th 2023, 1:15:43 pm
  * 
  * Copyright (c) 2023 Si Huynh
  * 
@@ -29,5 +29,29 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
  */
-export 'src/folder_list_screen.dart';
-export 'src/l10n/folder_list_localizations.dart';
+import 'package:key_value_storage/key_value_storage.dart';
+import 'package:uuid/uuid.dart';
+
+class FolderLocalStorage {
+  final KeyValueStorage keyValueStorage;
+
+  FolderLocalStorage({
+    required this.keyValueStorage,
+  });
+
+  Future<void> upsertFolder(String name) async {
+    final box = await keyValueStorage.folderBox;
+    final folder = FolderCM(id: const Uuid().toString(), name: name);
+    return box.put(name, folder);
+  }
+
+  Future<void> deleteFolder(String name) async {
+    final box = await keyValueStorage.folderBox;
+    return box.delete(name);
+  }
+
+  Future<List<FolderCM>> getAllFolders() async {
+    final box = await keyValueStorage.folderBox;
+    return box.values.toList();
+  }
+}

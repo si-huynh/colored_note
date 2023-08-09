@@ -1,5 +1,5 @@
 /*
- * Created By: Sĩ Huỳnh on Sunday, August 6th 2023, 7:33:36 pm
+ * Created By: Sĩ Huỳnh on Monday, August 7th 2023, 3:44:45 pm
  * 
  * Copyright (c) 2023 Si Huynh
  * 
@@ -29,5 +29,43 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
  */
-export 'src/folder_list_screen.dart';
-export 'src/l10n/folder_list_localizations.dart';
+import 'dart:developer';
+
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:folder_list/src/folder_list_state.dart';
+import 'package:folder_repository/folder_repository.dart';
+
+class FolderListCubit extends Cubit<FolderListState> {
+  FolderListCubit({
+    required this.folderRepository,
+  }) : super(
+          const FolderListInProgress(),
+        ) {
+    _fetchFolderList();
+  }
+
+  final FolderRepository folderRepository;
+
+  Future<void> _fetchFolderList() async {
+    try {
+      log('Perform fetching folders...');
+      final folderList = await folderRepository.getAllFolders();
+      emit(FolderListSuccess(folderList: folderList));
+      log('Done. We have ${folderList.length} folders');
+    } catch (error) {
+      emit(const FolderListStateFailure());
+    }
+  }
+
+  Future<void> createNewFolder(String name) async {
+    try {
+      log('Creating new folder...');
+      await folderRepository.upsertFolder(name);
+      log('Folder $name was created');
+      emit(const FolderListInProgress());
+      await _fetchFolderList();
+    } catch (error) {
+      log('Failed to create new folder', error: error);
+    }
+  }
+}
