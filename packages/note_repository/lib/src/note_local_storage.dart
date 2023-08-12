@@ -1,5 +1,5 @@
 /*
- * Created By: Sĩ Huỳnh on Monday, August 7th 2023, 1:15:43 pm
+ * Created By: Sĩ Huỳnh on Wednesday, August 9th 2023, 2:11:21 pm
  * 
  * Copyright (c) 2023 Si Huynh
  * 
@@ -31,30 +31,30 @@
  */
 import 'package:key_value_storage/key_value_storage.dart';
 
-class FolderLocalStorage {
-  final KeyValueStorage keyValueStorage;
-
-  FolderLocalStorage({
+class NoteLocalStorage {
+  NoteLocalStorage({
     required this.keyValueStorage,
   });
 
-  Future<void> upsertFolder(FolderCM folder) async {
-    final box = await keyValueStorage.folderBox;
-    return box.put(folder.name, folder);
+  final KeyValueStorage keyValueStorage;
+
+  Future<void> upsertNote(NoteCM note) async {
+    final box = await keyValueStorage.noteBox;
+    return box.put(note.id, note);
   }
 
-  Future<void> deleteFolder(String name) async {
-    final box = await keyValueStorage.folderBox;
-    return box.delete(name);
+  Future<List<NoteCM>> getNotesByFolder(String name) async {
+    final box = await keyValueStorage.noteBox;
+    return box.values.where((element) => element.folder == name).toList();
   }
 
-  Future<List<FolderCM>> getAllFolders() async {
-    final box = await keyValueStorage.folderBox;
-    return box.values.toList();
+  Future<NoteCM> getNoteByID(String id) async {
+    final box = await keyValueStorage.noteBox;
+    return box.get(id)!;
   }
 
-  Future<FolderCM?> getFolderByName(String name) async {
-    final box = await keyValueStorage.folderBox;
-    return box.get(name);
+  Future<void> deleteNoteByID(String id) async {
+    final box = await keyValueStorage.noteBox;
+    return box.delete(id);
   }
 }

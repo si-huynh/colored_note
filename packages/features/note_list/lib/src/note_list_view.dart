@@ -1,5 +1,5 @@
 /*
- * Created By: Sĩ Huỳnh on Sunday, August 6th 2023, 7:33:50 pm
+ * Created By: Sĩ Huỳnh on Thursday, August 10th 2023, 9:43:15 am
  * 
  * Copyright (c) 2023 Si Huynh
  * 
@@ -29,35 +29,70 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
  */
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:folder_list/src/folder_cubit.dart';
-import 'package:folder_list/src/folder_list_view.dart' show FolderListView, FolderItemSelected;
-import 'package:folder_repository/folder_repository.dart';
+import 'package:note_list/src/note_list_cubit.dart';
+import 'package:note_list/src/note_list_state.dart';
+import 'package:note_list/src/widgets/note_list_item_view.dart';
 
-class FolderListScreen extends StatelessWidget {
-  const FolderListScreen({
+typedef OnNoteItemSelected = Function(String id);
+
+class NoteListView extends StatefulWidget {
+  const NoteListView({
     super.key,
-    required this.folderRepository,
-    required VoidCallback onNewNoteButtonPressed,
-    FolderItemSelected? folderItemSelected,
-  })  : _folderItemSelected = folderItemSelected,
+    required this.title,
+    OnNoteItemSelected? onNoteItemSelected,
+    VoidCallback? onNewNoteButtonPressed,
+  })  : _onNoteItemSelected = onNoteItemSelected,
         _onNewNoteButtonPressed = onNewNoteButtonPressed;
 
-  final FolderRepository folderRepository;
-  final FolderItemSelected? _folderItemSelected;
-  final VoidCallback _onNewNoteButtonPressed;
+  final String title;
+  final OnNoteItemSelected? _onNoteItemSelected;
+  final VoidCallback? _onNewNoteButtonPressed;
 
   @override
+  State<NoteListView> createState() => _NoteListViewState();
+}
+
+class _NoteListViewState extends State<NoteListView> {
+  @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => FolderListCubit(
-        folderRepository: folderRepository,
-      ),
-      child: FolderListView(
-        folderItemSelected: _folderItemSelected,
-        onNewNoteButtonPressed: _onNewNoteButtonPressed,
-      ),
+    return BlocConsumer<NoteListCubit, NoteListState>(
+      builder: (context, state) {
+        final notes = state.noteList;
+
+        // Note List
+        var noteListContent = SliverPadding(
+          padding: const EdgeInsets.all(20),
+          sliver: SliverFixedExtentList(
+            delegate: SliverChildBuilderDelegate((context, index) {
+              return NoteListItemView(
+                note: notes[index],
+                onItemSelected: widget._onNoteItemSelected,
+              );
+            }, childCount: notes.length),
+            itemExtent: 56,
+          ),
+        );
+
+        return Scaffold(
+          body: CustomScrollView(
+            slivers: [
+              SliverAppBar(
+                title: Text(widget.title),
+              ),
+              noteListContent,
+            ],
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: widget._onNewNoteButtonPressed,
+            heroTag: 'compose-button',
+            child: const Icon(Icons.add),
+          ),
+        );
+      },
+      listener: (context, state) => {},
     );
   }
 }

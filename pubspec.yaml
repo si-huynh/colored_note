@@ -16,6 +16,8 @@ dependencies:
         path: packages/features/folder_list
     folder_repository:
         path: packages/folder_repository
+    note_repository:
+        path: packages/note_repository
     key_value_storage:
         path: packages/key_value_storage
     note_list:
@@ -30,3 +32,5 @@ dev_dependencies:
 
 flutter:
     uses-material-design: true
+    assets:
+        - assets/note_template.json

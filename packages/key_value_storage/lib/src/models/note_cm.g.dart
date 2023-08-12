@@ -18,21 +18,30 @@ class NoteCMAdapter extends TypeAdapter<NoteCM> {
     };
     return NoteCM(
       id: fields[0] as String,
-      title: fields[1] as String,
-      body: fields[2] as String,
+      content: (fields[1] as List).cast<dynamic>(),
+      title: fields[2] as String,
+      body: fields[3] as String,
+      updatedDate: fields[5] as DateTime,
+      folder: fields[4] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, NoteCM obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.title)
+      ..write(obj.content)
       ..writeByte(2)
-      ..write(obj.body);
+      ..write(obj.title)
+      ..writeByte(3)
+      ..write(obj.body)
+      ..writeByte(4)
+      ..write(obj.folder)
+      ..writeByte(5)
+      ..write(obj.updatedDate);
   }
 
   @override

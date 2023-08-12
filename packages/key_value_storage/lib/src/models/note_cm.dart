@@ -36,14 +36,30 @@ part 'note_cm.g.dart';
 
 @HiveType(typeId: 0)
 class NoteCM {
-  const NoteCM({required this.id, required this.title, required this.body});
+  const NoteCM({
+    required this.id,
+    required this.content,
+    required this.title,
+    required this.body,
+    required this.updatedDate,
+    this.folder = 'All',
+  });
 
   @HiveField(0)
   final String id;
 
   @HiveField(1)
-  final String title;
+  final List<dynamic> content;
 
   @HiveField(2)
+  final String title;
+
+  @HiveField(3)
   final String body;
+
+  @HiveField(4)
+  final String folder;
+
+  @HiveField(5)
+  final DateTime updatedDate;
 }

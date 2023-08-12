@@ -29,7 +29,6 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
  */
-import 'dart:developer';
 
 import 'package:domain_models/domain_models.dart';
 import 'package:flutter/material.dart';
@@ -44,10 +43,13 @@ typedef FolderItemSelected = Function(String name);
 class FolderListView extends StatelessWidget {
   const FolderListView({
     super.key,
+    required VoidCallback onNewNoteButtonPressed,
     FolderItemSelected? folderItemSelected,
-  }) : _folderItemSelected = folderItemSelected;
+  })  : _folderItemSelected = folderItemSelected,
+        _onNewNoteButtonPressed = onNewNoteButtonPressed;
 
   final FolderItemSelected? _folderItemSelected;
+  final VoidCallback _onNewNoteButtonPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -83,83 +85,14 @@ class FolderListView extends StatelessWidget {
               ),
             ],
           ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: _onNewNoteButtonPressed,
+            heroTag: null,
+            child: const Icon(Icons.add),
+          ),
         );
       },
-      listener: (context, state) {
-        log('onStateChanged: $state');
-      },
+      listener: (context, state) {},
     );
   }
-
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Material(
-  //     child: CustomScrollView(
-  //       slivers: [
-  //         SliverAppBar.large(
-  //           leading: const AddNewFolderButton(),
-  //           title: const Text('Folders'),
-  //           actions: <Widget>[
-  //             IconButton(
-  //               icon: const Icon(Icons.cloud_off_outlined),
-  //               onPressed: () {},
-  //             ),
-  //           ],
-  //         ),
-  //         SliverToBoxAdapter(
-  //           child: Card(
-  //             child: SizedBox(
-  //               height: 1200,
-  //               child: Padding(
-  //                 padding: const EdgeInsets.fromLTRB(8, 16, 8, 16),
-  //                 child: Column(
-  //                   children: [
-  //                     Card(
-  //                       elevation: 0,
-  //                       shape: RoundedRectangleBorder(
-  //                         side: BorderSide(
-  //                           color: Theme.of(context).colorScheme.outline,
-  //                         ),
-  //                         borderRadius: const BorderRadius.all(Radius.circular(12)),
-  //                       ),
-  //                       child: const ListTile(
-  //                         title: Text('One-line ListTile'),
-  //                       ),
-  //                     ),
-  //                     Card(
-  //                       elevation: 0,
-  //                       shape: RoundedRectangleBorder(
-  //                         side: BorderSide(
-  //                           color: Theme.of(context).colorScheme.outline,
-  //                         ),
-  //                         borderRadius: const BorderRadius.all(Radius.circular(12)),
-  //                       ),
-  //                       child: const ListTile(
-  //                         leading: Icon(Icons.folder),
-  //                         title: Text('One-line with leading widget'),
-  //                       ),
-  //                     ),
-  //                     Card(
-  //                       elevation: 0,
-  //                       shape: RoundedRectangleBorder(
-  //                         side: BorderSide(
-  //                           color: Theme.of(context).colorScheme.outline,
-  //                         ),
-  //                         borderRadius: const BorderRadius.all(Radius.circular(12)),
-  //                       ),
-  //                       child: const ListTile(
-  //                         title: Text('One-line with trailing widget'),
-  //                         trailing: Icon(Icons.more_vert),
-  //                       ),
-  //                     ),
-  //                   ],
-  //                 ),
-  //               ),
-  //             ),
-  //           ),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
 }

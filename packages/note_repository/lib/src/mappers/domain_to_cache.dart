@@ -1,5 +1,5 @@
 /*
- * Created By: Sĩ Huỳnh on Monday, August 7th 2023, 1:15:43 pm
+ * Created By: Sĩ Huỳnh on Thursday, August 10th 2023, 10:43:31 am
  * 
  * Copyright (c) 2023 Si Huynh
  * 
@@ -29,32 +29,29 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
  */
+import 'package:domain_models/domain_models.dart';
 import 'package:key_value_storage/key_value_storage.dart';
 
-class FolderLocalStorage {
-  final KeyValueStorage keyValueStorage;
+extension NoteDomainToCM on Note {
+  NoteCM toCacheModel({List<dynamic> content = const [], bool changed = false}) {
+    var newTitle = title;
+    if (content.isNotEmpty && content[0] is Map) {
+      final insert = content[0]['insert'] as String;
+      newTitle = insert.split('\n')[0];
+    }
 
-  FolderLocalStorage({
-    required this.keyValueStorage,
-  });
+    var newUpdatedDate = updatedDate;
+    if (changed) {
+      newUpdatedDate = DateTime.now();
+    }
 
-  Future<void> upsertFolder(FolderCM folder) async {
-    final box = await keyValueStorage.folderBox;
-    return box.put(folder.name, folder);
-  }
-
-  Future<void> deleteFolder(String name) async {
-    final box = await keyValueStorage.folderBox;
-    return box.delete(name);
-  }
-
-  Future<List<FolderCM>> getAllFolders() async {
-    final box = await keyValueStorage.folderBox;
-    return box.values.toList();
-  }
-
-  Future<FolderCM?> getFolderByName(String name) async {
-    final box = await keyValueStorage.folderBox;
-    return box.get(name);
+    return NoteCM(
+      id: id,
+      content: content,
+      title: newTitle,
+      body: body,
+      updatedDate: newUpdatedDate,
+      folder: folder,
+    );
   }
 }

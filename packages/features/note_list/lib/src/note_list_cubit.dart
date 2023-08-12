@@ -1,5 +1,5 @@
 /*
- * Created By: Sĩ Huỳnh on Sunday, August 6th 2023, 4:14:31 pm
+ * Created By: Sĩ Huỳnh on Thursday, August 10th 2023, 9:56:48 am
  * 
  * Copyright (c) 2023 Si Huynh
  * 
@@ -29,33 +29,70 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
  */
+import 'dart:developer';
 
-import 'package:flutter/material.dart';
+import 'package:domain_models/domain_models.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:note_compose/src/note_compose_cubit.dart';
-import 'package:note_compose/src/note_compose_view.dart';
+import 'package:note_list/src/note_list_state.dart';
 import 'package:note_repository/note_repository.dart';
 
-class NoteComposeScreen extends StatelessWidget {
-  const NoteComposeScreen({
-    super.key,
-    required this.noteID,
+class NoteListCubit extends Cubit<NoteListState> {
+  NoteListCubit({
+    required this.folder,
     required this.noteRepository,
-  });
+  }) : super(const NoteListState()) {
+    fetchNoteList();
+  }
 
-  final String noteID;
   final NoteRepository noteRepository;
+  final String folder;
 
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => NoteComposeCubit(id: noteID, noteRepository: noteRepository),
-      child: Scaffold(
-        appBar: AppBar(),
-        body: NoteComposeView(
-          noteID: noteID,
-        ),
-      ),
-    );
+  Future<void> fetchNoteList() async {
+    try {
+      log('Peform fetching notes...');
+      final noteList = await noteRepository.getAllNotes(folder);
+      log('done. We have ${noteList.length} notes in $folder folder');
+      emit(NoteListState(noteList: noteList));
+    } catch (error) {
+      log('Failed to load note list in folder $folder', error: error);
+    }
+  }
+
+  Future<Note?> createNewNote() async {
+    try {
+      final note = Note.craft(folder: folder);
+      await noteRepository.upsertNote(note);
+      await fetchNoteList();
+      return note;
+    } catch (error) {
+      log('Failed to create new note', error: error);
+      return null;
+    }
+  }
+
+  Future<void> deleteNote(String id) async {
+    try {
+      await noteRepository.deleteNoteByID(id);
+      await fetchNoteList();
+    } catch (error) {
+      log('Failed to delete note', error: error);
+    }
+  }
+
+  Future<void> deleteCraftNote() async {
+    try {
+      final noteList = await noteRepository.getAllNotes(folder);
+      if (noteList.isNotEmpty) {
+        final note = noteList.first;
+        if ((note.title == 'New Note' || note.title.isEmpty) && note.body.isEmpty) {
+          await deleteNote(note.id);
+        } else {
+          emit(const NoteListState(noteList: []));
+          await fetchNoteList();
+        }
+      }
+    } catch (error) {
+      log('Failed to delete note', error: error);
+    }
   }
 }

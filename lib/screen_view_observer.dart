@@ -1,5 +1,5 @@
 /*
- * Created By: Sĩ Huỳnh on Monday, August 7th 2023, 1:15:43 pm
+ * Created By: Sĩ Huỳnh on Thursday, August 10th 2023, 2:20:48 pm
  * 
  * Copyright (c) 2023 Si Huynh
  * 
@@ -29,32 +29,18 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
  */
-import 'package:key_value_storage/key_value_storage.dart';
 
-class FolderLocalStorage {
-  final KeyValueStorage keyValueStorage;
+import 'package:flutter/material.dart';
+import 'package:note_list/note_list.dart';
+import 'package:routemaster/routemaster.dart';
 
-  FolderLocalStorage({
-    required this.keyValueStorage,
-  });
-
-  Future<void> upsertFolder(FolderCM folder) async {
-    final box = await keyValueStorage.folderBox;
-    return box.put(folder.name, folder);
-  }
-
-  Future<void> deleteFolder(String name) async {
-    final box = await keyValueStorage.folderBox;
-    return box.delete(name);
-  }
-
-  Future<List<FolderCM>> getAllFolders() async {
-    final box = await keyValueStorage.folderBox;
-    return box.values.toList();
-  }
-
-  Future<FolderCM?> getFolderByName(String name) async {
-    final box = await keyValueStorage.folderBox;
-    return box.get(name);
+class ScreenViewObserver extends RoutemasterObserver {
+  @override
+  void didChangeRoute(RouteData routeData, Page page) {
+    super.didChangeRoute(routeData, page);
+    if (page is MaterialPage && page.name == 'note-list') {
+      final noteList = page.child as NoteListScreen;
+      noteList.onFocused();
+    }
   }
 }

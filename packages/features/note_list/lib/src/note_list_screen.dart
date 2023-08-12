@@ -30,30 +30,46 @@
  *  THE SOFTWARE.
  */
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:note_list/src/note_list_cubit.dart';
+import 'package:note_list/src/note_list_view.dart' show NoteListView, OnNoteItemSelected;
+import 'package:note_repository/note_repository.dart';
 
-typedef ComposeButtonPressed = Function();
-
-class NoteListScreen extends StatefulWidget {
-  const NoteListScreen({
+class NoteListScreen extends StatelessWidget {
+  NoteListScreen({
     super.key,
-    required this.onComposeButtonPressed,
-  });
+    required this.title,
+    required NoteRepository noteRepository,
+    OnNoteItemSelected? onNoteItemSelected,
+    VoidCallback? onNewNoteButtonPressed,
+  })  : _cubit = NoteListCubit(
+          folder: title,
+          noteRepository: noteRepository,
+        ),
+        _onNoteItemSelected = onNoteItemSelected,
+        _onNewNoteButtonPressed = onNewNoteButtonPressed;
 
-  final ComposeButtonPressed onComposeButtonPressed;
+  final String title;
+  final OnNoteItemSelected? _onNoteItemSelected;
+  final VoidCallback? _onNewNoteButtonPressed;
 
-  @override
-  State<NoteListScreen> createState() => _NoteListScreenState();
-}
+  final NoteListCubit _cubit;
 
-class _NoteListScreenState extends State<NoteListScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: const Column(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: widget.onComposeButtonPressed,
-        child: const Icon(Icons.add),
+    return BlocProvider(
+      create: (_) => _cubit,
+      child: NoteListView(
+        title: title,
+        onNoteItemSelected: _onNoteItemSelected,
+        onNewNoteButtonPressed: _onNewNoteButtonPressed,
       ),
     );
+  }
+
+  onFocused() {
+    Future.delayed(const Duration(milliseconds: 100), () {
+      _cubit.deleteCraftNote();
+    });
   }
 }

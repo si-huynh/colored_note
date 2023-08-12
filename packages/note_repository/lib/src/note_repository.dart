@@ -1,5 +1,5 @@
 /*
- * Created By: Sĩ Huỳnh on Monday, August 7th 2023, 1:28:06 pm
+ * Created By: Sĩ Huỳnh on Wednesday, August 9th 2023, 2:10:47 pm
  * 
  * Copyright (c) 2023 Si Huynh
  * 
@@ -31,36 +31,55 @@
  */
 import 'package:domain_models/domain_models.dart';
 import 'package:flutter/foundation.dart';
-import 'package:folder_repository/src/folder_local_storage.dart';
-import 'package:folder_repository/src/mappers/cache_to_domain.dart';
-import 'package:folder_repository/src/mappers/domain_to_cache.dart';
 import 'package:key_value_storage/key_value_storage.dart';
+import 'package:note_repository/src/mappers/cache_to_domain.dart';
+import 'package:note_repository/src/mappers/domain_to_cache.dart';
+import 'package:note_repository/src/note_local_storage.dart';
 
-class FolderRepository {
-  final FolderLocalStorage _localStorage;
-
-  FolderRepository({
+class NoteRepository {
+  NoteRepository({
     required KeyValueStorage keyValueStorage,
-    @visibleForTesting FolderLocalStorage? localStorage,
-  }) : _localStorage = localStorage ?? FolderLocalStorage(keyValueStorage: keyValueStorage);
+    @visibleForTesting NoteLocalStorage? localStorage,
+  }) : _localStorage = localStorage ?? NoteLocalStorage(keyValueStorage: keyValueStorage);
 
-  Future<Folder> upsertFolder(String name) async {
-    final folder = Folder.craft(name: name);
-    await _localStorage.upsertFolder(folder.toCacheModel());
-    return folder;
+  final NoteLocalStorage _localStorage;
+
+  Future<void> upsertNote(Note note) async {
+    final cacheModel = note.toCacheModel();
+    return await _localStorage.upsertNote(cacheModel);
   }
 
-  Future<void> deleteFolder(String name) async {
-    return await _localStorage.deleteFolder(name);
+  Future<String> newCraftNode({String folder = 'All'}) async {
+    final note = Note.craft(folder: folder);
+    await upsertNote(note);
+    return note.id;
   }
 
-  Future<List<Folder>> getAllFolders() async {
-    final folders = await _localStorage.getAllFolders();
-    return folders.map((folder) => folder.toDomainModel()).toList();
+  Future<List<Note>> getAllNotes(String folder) async {
+    final notes = await _localStorage.getNotesByFolder(folder);
+    notes.sort((a, b) => b.updatedDate.compareTo(a.updatedDate));
+    return notes.map((note) => note.toDomainModel()).toList();
   }
 
-  Future<Folder?> getFolderByName(String name) async {
-    final folder = await _localStorage.getFolderByName(name);
-    return folder?.toDomainModel();
+  Future<Note> getNoteByID(String id) async {
+    final noteCM = await _localStorage.getNoteByID(id);
+    return noteCM.toDomainModel();
+  }
+
+  Future<List<dynamic>> getContent(String id) async {
+    final noteCM = await _localStorage.getNoteByID(id);
+    return noteCM.content;
+  }
+
+  Future<void> deleteNoteByID(String id) async {
+    return await _localStorage.deleteNoteByID(id);
+  }
+
+  Future<void> updateContent(List<dynamic> content, Note note, {bool changed = false}) async {
+    final cacheModel = note.toCacheModel(
+      content: content,
+      changed: changed,
+    );
+    return await _localStorage.upsertNote(cacheModel);
   }
 }

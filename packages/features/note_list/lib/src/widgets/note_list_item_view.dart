@@ -1,5 +1,5 @@
 /*
- * Created By: Sĩ Huỳnh on Wednesday, August 9th 2023, 11:12:15 am
+ * Created By: Sĩ Huỳnh on Thursday, August 10th 2023, 11:06:16 am
  * 
  * Copyright (c) 2023 Si Huynh
  * 
@@ -32,20 +32,22 @@
 import 'package:domain_models/domain_models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:folder_list/src/folder_cubit.dart';
+import 'package:note_list/src/note_list_cubit.dart';
 
-class FolderListItemView extends StatelessWidget {
-  const FolderListItemView({super.key, required folder, onItemSelected, onItemDeleted})
-      : _folder = folder,
-        _onItemSelected = onItemSelected;
+class NoteListItemView extends StatelessWidget {
+  const NoteListItemView({
+    super.key,
+    required this.note,
+    Function(String)? onItemSelected,
+  }) : _onItemSelected = onItemSelected;
 
-  final Folder _folder;
-  final Function(String name)? _onItemSelected;
+  final Note note;
+  final Function(String id)? _onItemSelected;
 
   @override
   Widget build(BuildContext context) {
     return Dismissible(
-      key: ObjectKey(_folder.id),
+      key: ObjectKey(note.id),
       background: Container(
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.error,
@@ -58,30 +60,14 @@ class FolderListItemView extends StatelessWidget {
           ),
         ),
       ),
-      direction: _folder.name == 'All' ? DismissDirection.none : DismissDirection.endToStart,
-      onDismissed: (_) => _performDelete(context, _folder.name),
+      direction: DismissDirection.endToStart,
       confirmDismiss: (_) => _confirmDimiss(context),
+      onDismissed: (_) => _performDelete(context, note.id),
       child: Card(
-        elevation: 0,
-        shape: RoundedRectangleBorder(
-          side: BorderSide(
-            color: Theme.of(context).colorScheme.outline,
-          ),
-          borderRadius: const BorderRadius.all(
-            Radius.circular(12),
-          ),
-        ),
         child: ListTile(
-          title: Text(_folder.name),
-          leading: const Icon(Icons.folder),
-          trailing: const Icon(Icons.chevron_right),
+          title: Text(note.title),
           visualDensity: VisualDensity.compact,
-          onTap: () => _onItemSelected?.call(_folder.name),
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(12),
-            ),
-          ),
+          onTap: () => _onItemSelected?.call(note.id),
         ),
       ),
     );
@@ -93,13 +79,15 @@ class FolderListItemView extends StatelessWidget {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text("Confirm"),
-          content: const Text("Are you sure you wish to delete this folder?"),
+          content: const Text("Are you sure you wish to delete this note?"),
           actions: <Widget>[
             MaterialButton(
-                onPressed: () => Navigator.of(context).pop(true), child: const Text("DELETE")),
+              onPressed: () => Navigator.of(context).pop(true),
+              child: const Text("Delete"),
+            ),
             MaterialButton(
               onPressed: () => Navigator.of(context).pop(false),
-              child: const Text("CANCEL"),
+              child: const Text("Cancel"),
             ),
           ],
         );
@@ -107,8 +95,8 @@ class FolderListItemView extends StatelessWidget {
     );
   }
 
-  _performDelete(BuildContext context, String name) {
-    final cubit = context.read<FolderListCubit>();
-    cubit.deleteFolder(name);
+  Future<void> _performDelete(BuildContext context, String id) async {
+    final cubit = context.read<NoteListCubit>();
+    return cubit.deleteNote(id);
   }
 }

@@ -30,18 +30,36 @@
  *  THE SOFTWARE.
  */
 import 'package:equatable/equatable.dart';
+import 'package:uuid/uuid.dart';
 
 class Note extends Equatable {
   const Note({
     required this.id,
     required this.title,
     required this.body,
+    required this.folder,
+    required this.updatedDate,
   });
 
   final String id;
   final String body;
   final String title;
+  final String folder;
+  final DateTime updatedDate;
 
   @override
   List<Object?> get props => [id];
+
+  factory Note.craft({
+    required String folder,
+    String title = 'New Note',
+    String body = '',
+  }) =>
+      Note(
+        id: const Uuid().v4().toString(),
+        title: title,
+        body: body,
+        folder: folder,
+        updatedDate: DateTime.now(),
+      );
 }

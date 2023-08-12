@@ -14,6 +14,8 @@ dependencies:
         sdk: flutter
     folder_repository:
         path: ../../folder_repository
+    note_repository:
+        path: ../../note_repository
     intl: ^0.18.0
     domain_models:
         path: ../../domain_models

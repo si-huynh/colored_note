@@ -50,6 +50,11 @@ class FolderListCubit extends Cubit<FolderListState> {
     try {
       log('Perform fetching folders...');
       final folderList = await folderRepository.getAllFolders();
+      if (folderList.isEmpty) {
+        final allFolder = await folderRepository.upsertFolder('All');
+        folderList.add(allFolder);
+      }
+
       emit(FolderListSuccess(folderList: folderList));
       log('Done. We have ${folderList.length} folders');
     } catch (error) {
@@ -59,13 +64,31 @@ class FolderListCubit extends Cubit<FolderListState> {
 
   Future<void> createNewFolder(String name) async {
     try {
+      if (await folderIsExist(name)) {
+        log('Folder $name existed');
+        return;
+      }
+
       log('Creating new folder...');
       await folderRepository.upsertFolder(name);
       log('Folder $name was created');
-      emit(const FolderListInProgress());
+
       await _fetchFolderList();
     } catch (error) {
       log('Failed to create new folder', error: error);
     }
+  }
+
+  Future<void> deleteFolder(String name) async {
+    try {
+      await folderRepository.deleteFolder(name);
+      await _fetchFolderList();
+    } catch (error) {
+      log('Failed to delete folder $name', error: error);
+    }
+  }
+
+  Future<bool> folderIsExist(String name) async {
+    return await folderRepository.getFolderByName(name) != null;
   }
 }

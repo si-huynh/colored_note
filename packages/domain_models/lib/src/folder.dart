@@ -31,6 +31,7 @@
  */
 import 'package:domain_models/src/note.dart';
 import 'package:equatable/equatable.dart';
+import 'package:uuid/uuid.dart';
 
 class Folder extends Equatable {
   final String id;
@@ -46,4 +47,7 @@ class Folder extends Equatable {
 
   @override
   List<Object?> get props => [id, name];
+
+  factory Folder.craft({required String name}) =>
+      Folder(id: const Uuid().v4().toString(), name: name);
 }

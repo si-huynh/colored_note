@@ -35,11 +35,13 @@ import 'package:folder_list/folder_list.dart';
 import 'package:folder_repository/folder_repository.dart';
 import 'package:note_compose/note_compose.dart';
 import 'package:note_list/note_list.dart';
+import 'package:note_repository/note_repository.dart';
 import 'package:routemaster/routemaster.dart';
 
 Map<String, PageBuilder> buildRoutingTable({
   required RoutemasterDelegate routerDelegate,
   required FolderRepository folderRepository,
+  required NoteRepository noteRepository,
 }) {
   return {
     _PathConstants.folderListPath: (route) {
@@ -50,23 +52,42 @@ Map<String, PageBuilder> buildRoutingTable({
           folderItemSelected: (name) {
             routerDelegate.push(_PathConstants.noteList(folder: name));
           },
+          onNewNoteButtonPressed: () async {
+            final noteID = await noteRepository.newCraftNode();
+            routerDelegate.push(_PathConstants.noteComposePath(folder: 'All', noteID: noteID));
+          },
         ),
       );
     },
     _PathConstants.noteList(): (route) {
+      final folder = route.pathParameters['folder']!;
+
       return MaterialPage(
         name: 'note-list',
         child: NoteListScreen(
-          onComposeButtonPressed: () {
-            routerDelegate.push(_PathConstants.noteComposePath());
+          title: folder,
+          noteRepository: noteRepository,
+          onNoteItemSelected: (noteID) {
+            routerDelegate.push(_PathConstants.noteComposePath(
+              folder: folder,
+              noteID: noteID,
+            ));
+          },
+          onNewNoteButtonPressed: () async {
+            final noteID = await noteRepository.newCraftNode(folder: folder);
+            routerDelegate.push(_PathConstants.noteComposePath(folder: 'All', noteID: noteID));
           },
         ),
       );
     },
     _PathConstants.noteComposePath(): (route) {
-      return const MaterialPage(
+      final noteID = route.pathParameters[_PathConstants.idPathParameter]!;
+      return MaterialPage(
         name: 'note-compose',
-        child: NoteComposeScreen(),
+        child: NoteComposeScreen(
+          noteID: noteID,
+          noteRepository: noteRepository,
+        ),
       );
     }
   };
@@ -77,10 +98,12 @@ class _PathConstants {
 
   static String get folderListPath => '/';
 
-  static String noteList({String folder = 'All'}) => '/$folder';
+  static String get folderPathParameter => 'folder';
+
+  static String noteList({String? folder}) => '/folder/${folder ?? ':$folderPathParameter'}';
 
   static String get idPathParameter => 'id';
 
-  static String noteComposePath({String folder = 'All', int? noteId}) =>
-      '/$folder/compose/${noteId ?? ':$idPathParameter'}';
+  static String noteComposePath({String? folder, String? noteID}) =>
+      '/folder/${folder ?? ':$folderPathParameter'}/${noteID ?? ':$idPathParameter'}';
 }

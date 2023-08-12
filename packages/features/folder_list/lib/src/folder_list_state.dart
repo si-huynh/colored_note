@@ -49,7 +49,7 @@ class FolderListSuccess extends FolderListState {
   final List<Folder> folderList;
 
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [folderList];
 }
 
 class FolderListStateFailure extends FolderListState {

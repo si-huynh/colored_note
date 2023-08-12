@@ -1,5 +1,5 @@
 /*
- * Created By: Sĩ Huỳnh on Monday, August 7th 2023, 1:15:43 pm
+ * Created By: Sĩ Huỳnh on Thursday, August 10th 2023, 11:51:57 am
  * 
  * Copyright (c) 2023 Si Huynh
  * 
@@ -29,32 +29,38 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
  */
-import 'package:key_value_storage/key_value_storage.dart';
+import 'dart:developer';
 
-class FolderLocalStorage {
-  final KeyValueStorage keyValueStorage;
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:note_compose/src/note_compose_state.dart';
+import 'package:note_repository/note_repository.dart';
 
-  FolderLocalStorage({
-    required this.keyValueStorage,
-  });
-
-  Future<void> upsertFolder(FolderCM folder) async {
-    final box = await keyValueStorage.folderBox;
-    return box.put(folder.name, folder);
+class NoteComposeCubit extends Cubit<NoteComposeState> {
+  NoteComposeCubit({
+    required this.id,
+    required this.noteRepository,
+  }) : super(const NoteComposeEmpty()) {
+    _performLoad();
   }
 
-  Future<void> deleteFolder(String name) async {
-    final box = await keyValueStorage.folderBox;
-    return box.delete(name);
+  final NoteRepository noteRepository;
+  final String id;
+
+  Future<void> _performLoad() async {
+    try {
+      final content = await noteRepository.getContent(id);
+      emit(NoteComposeLoaded(content: content));
+    } catch (error) {
+      log('Failed to fetch note', error: error);
+    }
   }
 
-  Future<List<FolderCM>> getAllFolders() async {
-    final box = await keyValueStorage.folderBox;
-    return box.values.toList();
-  }
-
-  Future<FolderCM?> getFolderByName(String name) async {
-    final box = await keyValueStorage.folderBox;
-    return box.get(name);
+  Future<void> saveChanges(List<dynamic> content, {bool changed = false}) async {
+    try {
+      final note = await noteRepository.getNoteByID(id);
+      await noteRepository.updateContent(content, note, changed: changed);
+    } catch (error) {
+      log('Failed to update content for note');
+    }
   }
 }

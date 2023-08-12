@@ -1,5 +1,5 @@
 /*
- * Created By: Sĩ Huỳnh on Monday, August 7th 2023, 1:15:43 pm
+ * Created By: Sĩ Huỳnh on Thursday, August 10th 2023, 9:48:02 am
  * 
  * Copyright (c) 2023 Si Huynh
  * 
@@ -29,32 +29,14 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
  */
-import 'package:key_value_storage/key_value_storage.dart';
+import 'package:domain_models/domain_models.dart';
+import 'package:equatable/equatable.dart';
 
-class FolderLocalStorage {
-  final KeyValueStorage keyValueStorage;
+class NoteListState extends Equatable {
+  const NoteListState({this.noteList = const []});
 
-  FolderLocalStorage({
-    required this.keyValueStorage,
-  });
+  final List<Note> noteList;
 
-  Future<void> upsertFolder(FolderCM folder) async {
-    final box = await keyValueStorage.folderBox;
-    return box.put(folder.name, folder);
-  }
-
-  Future<void> deleteFolder(String name) async {
-    final box = await keyValueStorage.folderBox;
-    return box.delete(name);
-  }
-
-  Future<List<FolderCM>> getAllFolders() async {
-    final box = await keyValueStorage.folderBox;
-    return box.values.toList();
-  }
-
-  Future<FolderCM?> getFolderByName(String name) async {
-    final box = await keyValueStorage.folderBox;
-    return box.get(name);
-  }
+  @override
+  List<Object?> get props => [noteList];
 }

@@ -35,11 +35,14 @@ part 'folder_cm.g.dart';
 
 @HiveType(typeId: 1)
 class FolderCM {
-  const FolderCM({required this.id, required this.name});
+  const FolderCM({required this.id, required this.name, this.noteIDs = const []});
 
   @HiveField(0)
   final String id;
 
   @HiveField(1)
   final String name;
+
+  @HiveField(2)
+  final List<String> noteIDs;
 }
