@@ -29,6 +29,8 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
  */
+import 'dart:developer';
+
 import 'package:domain_models/domain_models.dart';
 import 'package:flutter/foundation.dart';
 import 'package:key_value_storage/key_value_storage.dart';
@@ -68,6 +70,7 @@ class NoteRepository {
 
   Future<List<dynamic>> getContent(String id) async {
     final noteCM = await _localStorage.getNoteByID(id);
+    log('time: ${noteCM.updatedDate}');
     return noteCM.content;
   }
 

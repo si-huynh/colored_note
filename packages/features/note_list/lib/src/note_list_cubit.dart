@@ -33,6 +33,7 @@ import 'dart:developer';
 
 import 'package:domain_models/domain_models.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:note_list/src/note_list_item.dart';
 import 'package:note_list/src/note_list_state.dart';
 import 'package:note_repository/note_repository.dart';
 
@@ -40,9 +41,7 @@ class NoteListCubit extends Cubit<NoteListState> {
   NoteListCubit({
     required this.folder,
     required this.noteRepository,
-  }) : super(const NoteListState()) {
-    fetchNoteList();
-  }
+  }) : super(const NoteListState());
 
   final NoteRepository noteRepository;
   final String folder;
@@ -52,7 +51,8 @@ class NoteListCubit extends Cubit<NoteListState> {
       log('Peform fetching notes...');
       final noteList = await noteRepository.getAllNotes(folder);
       log('done. We have ${noteList.length} notes in $folder folder');
-      emit(NoteListState(noteList: noteList));
+      final noteListItem = noteList.map((e) => NoteListItem.fromDomainModel(e)).toList();
+      emit(NoteListState(noteList: noteListItem));
     } catch (error) {
       log('Failed to load note list in folder $folder', error: error);
     }

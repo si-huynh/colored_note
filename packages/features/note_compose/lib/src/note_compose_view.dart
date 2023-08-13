@@ -149,9 +149,9 @@ class _NoteComposeViewState extends State<NoteComposeView> {
   }
 
   Future<bool> _onWillPop() async {
-    Navigator.of(context).pop(widget.noteID);
+    // Navigator.of(context).pop(widget.noteID);
     final delta = _quillController!.document.toDelta();
     await _performSaveChanges(DocChange(delta, delta, ChangeSource.LOCAL));
-    return false;
+    return true;
   }
 }

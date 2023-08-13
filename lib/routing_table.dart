@@ -54,7 +54,10 @@ Map<String, PageBuilder> buildRoutingTable({
           },
           onNewNoteButtonPressed: () async {
             final noteID = await noteRepository.newCraftNode();
-            routerDelegate.push(_PathConstants.noteComposePath(folder: 'All', noteID: noteID));
+            routerDelegate.push(_PathConstants.noteComposePath(
+              folder: 'All',
+              noteID: noteID,
+            ));
           },
         ),
       );
@@ -75,7 +78,10 @@ Map<String, PageBuilder> buildRoutingTable({
           },
           onNewNoteButtonPressed: () async {
             final noteID = await noteRepository.newCraftNode(folder: folder);
-            routerDelegate.push(_PathConstants.noteComposePath(folder: 'All', noteID: noteID));
+            routerDelegate.push(_PathConstants.noteComposePath(
+              folder: folder,
+              noteID: noteID,
+            ));
           },
         ),
       );

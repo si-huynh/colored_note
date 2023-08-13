@@ -45,6 +45,9 @@ class NoteLocalStorage {
 
   Future<List<NoteCM>> getNotesByFolder(String name) async {
     final box = await keyValueStorage.noteBox;
+    if (name == 'All') {
+      return box.values.toList();
+    }
     return box.values.where((element) => element.folder == name).toList();
   }
 

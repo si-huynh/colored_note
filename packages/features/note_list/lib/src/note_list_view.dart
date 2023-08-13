@@ -32,6 +32,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:grouped_list/sliver_grouped_list.dart';
 import 'package:note_list/src/note_list_cubit.dart';
 import 'package:note_list/src/note_list_state.dart';
 import 'package:note_list/src/widgets/note_list_item_view.dart';
@@ -63,23 +64,32 @@ class _NoteListViewState extends State<NoteListView> {
         final notes = state.noteList;
 
         // Note List
-        var noteListContent = SliverPadding(
-          padding: const EdgeInsets.all(20),
-          sliver: SliverFixedExtentList(
-            delegate: SliverChildBuilderDelegate((context, index) {
-              return NoteListItemView(
-                note: notes[index],
-                onItemSelected: widget._onNoteItemSelected,
-              );
-            }, childCount: notes.length),
-            itemExtent: 56,
+        final paddingBottom = MediaQuery.of(context).padding.bottom;
+        final noteListContent = SliverPadding(
+          padding: EdgeInsets.fromLTRB(20, 0, 20, paddingBottom),
+          sliver: SliverGroupedListView(
+            elements: notes,
+            groupBy: (note) => note.group.order,
+            groupHeaderBuilder: (note) => Padding(
+              padding: const EdgeInsets.fromLTRB(8, 16, 8, 8),
+              child: Text(
+                note.group.name,
+                style: Theme.of(context).textTheme.titleSmall,
+              ),
+            ),
+            itemComparator: (element1, element2) {
+              return element1.group.order.compareTo(element2.group.order);
+            },
+            itemBuilder: (context, note) => NoteListItemView(
+              note: note,
+              onItemSelected: widget._onNoteItemSelected,
+            ),
           ),
         );
-
         return Scaffold(
           body: CustomScrollView(
             slivers: [
-              SliverAppBar(
+              SliverAppBar.large(
                 title: Text(widget.title),
               ),
               noteListContent,

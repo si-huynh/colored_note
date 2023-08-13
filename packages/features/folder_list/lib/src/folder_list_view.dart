@@ -63,12 +63,6 @@ class FolderListView extends StatelessWidget {
               SliverAppBar.large(
                 leading: const AddNewFolderButton(),
                 title: const Text('Folders'),
-                actions: [
-                  IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.cloud_off_outlined),
-                  ),
-                ],
               ),
               SliverPadding(
                 padding: const EdgeInsets.all(20),

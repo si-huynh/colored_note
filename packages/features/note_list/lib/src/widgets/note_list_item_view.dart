@@ -29,10 +29,11 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
  */
-import 'package:domain_models/domain_models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:note_list/src/note_list_cubit.dart';
+import 'package:note_list/src/note_list_item.dart';
 
 class NoteListItemView extends StatelessWidget {
   const NoteListItemView({
@@ -41,14 +42,21 @@ class NoteListItemView extends StatelessWidget {
     Function(String)? onItemSelected,
   }) : _onItemSelected = onItemSelected;
 
-  final Note note;
+  final NoteListItem note;
   final Function(String id)? _onItemSelected;
 
   @override
   Widget build(BuildContext context) {
+    var formatTime = DateFormat.yMMMd().format(note.time);
+    if (note.group.name == 'Today' || note.group.name == 'Yesterday') {
+      formatTime = DateFormat.Hm().format(note.time);
+    } else {
+      formatTime = DateFormat('EEEE dd').format(note.time);
+    }
     return Dismissible(
       key: ObjectKey(note.id),
       background: Container(
+        alignment: Alignment.center,
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.error,
           borderRadius: BorderRadius.circular(12),
@@ -58,6 +66,7 @@ class NoteListItemView extends StatelessWidget {
             Icons.delete,
             color: Theme.of(context).colorScheme.onError,
           ),
+          visualDensity: VisualDensity.standard,
         ),
       ),
       direction: DismissDirection.endToStart,
@@ -66,7 +75,13 @@ class NoteListItemView extends StatelessWidget {
       child: Card(
         child: ListTile(
           title: Text(note.title),
-          visualDensity: VisualDensity.compact,
+          subtitle: Text(
+            formatTime,
+            style: Theme.of(context).textTheme.labelSmall,
+          ),
+          trailing: const Icon(Icons.chevron_right),
+          leading: const Icon(Icons.note),
+          visualDensity: VisualDensity.comfortable,
           onTap: () => _onItemSelected?.call(note.id),
         ),
       ),

@@ -1,5 +1,5 @@
 /*
- * Created By: Sĩ Huỳnh on Thursday, August 10th 2023, 9:48:02 am
+ * Created By: Sĩ Huỳnh on Saturday, August 12th 2023, 11:22:26 am
  * 
  * Copyright (c) 2023 Si Huynh
  * 
@@ -29,14 +29,47 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
  */
-import 'package:equatable/equatable.dart';
-import 'package:note_list/src/note_list_item.dart';
 
-class NoteListState extends Equatable {
-  const NoteListState({this.noteList = const []});
+import 'package:domain_models/domain_models.dart';
+import 'package:intl/intl.dart';
 
-  final List<NoteListItem> noteList;
+class NoteListItemGroup {
+  final String name;
+  final int order;
+
+  NoteListItemGroup(this.name, this.order);
+}
+
+class NoteListItem implements Comparable<NoteListItem> {
+  final String id;
+  final String title;
+  final DateTime time;
+
+  late final NoteListItemGroup group;
+
+  NoteListItem(this.id, this.title, this.time) : super() {
+    group = _createGroupByTime(time);
+  }
+
+  factory NoteListItem.fromDomainModel(Note note) {
+    return NoteListItem(note.id, note.title, note.updatedDate);
+  }
+
+  NoteListItemGroup _createGroupByTime(DateTime time) {
+    final today = DateTime.now();
+    final diff = today.difference(time);
+    if (diff.inHours < 24) return NoteListItemGroup('Today', 0);
+    if (diff.inDays == 1) return NoteListItemGroup('Yesterday', 1);
+    if (time.month == today.month) return NoteListItemGroup('This Month', 2);
+    if (time.year == today.year) {
+      int diffMonth = today.month - time.month - 1;
+      return NoteListItemGroup(DateFormat.MMMM().format(time), 3 + diffMonth);
+    }
+    return NoteListItemGroup(DateFormat.y().format(time), time.year);
+  }
 
   @override
-  List<Object?> get props => [noteList];
+  int compareTo(NoteListItem other) {
+    return time.compareTo(other.time);
+  }
 }

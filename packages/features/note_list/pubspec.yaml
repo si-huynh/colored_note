@@ -6,17 +6,18 @@ environment:
     flutter: ">=1.17.0"
 
 dependencies:
+    domain_models:
+        path: ../../domain_models
     equatable: ^2.0.5
     flutter:
         sdk: flutter
     flutter_bloc: ^8.1.3
     flutter_localizations:
         sdk: flutter
+    grouped_list: ^5.1.2
+    intl: ^0.18.0
     note_repository:
         path: ../../note_repository
-    intl: ^0.18.0
-    domain_models:
-        path: "../../domain_models"
 
 dev_dependencies:
     flutter_lints: ^2.0.0
