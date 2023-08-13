@@ -61,40 +61,8 @@ class _NoteListViewState extends State<NoteListView> {
   Widget build(BuildContext context) {
     return BlocConsumer<NoteListCubit, NoteListState>(
       builder: (context, state) {
-        final notes = state.noteList;
-
-        // Note List
-        final paddingBottom = MediaQuery.of(context).padding.bottom;
-        final noteListContent = SliverPadding(
-          padding: EdgeInsets.fromLTRB(20, 0, 20, paddingBottom),
-          sliver: SliverGroupedListView(
-            elements: notes,
-            groupBy: (note) => note.group.order,
-            groupHeaderBuilder: (note) => Padding(
-              padding: const EdgeInsets.fromLTRB(8, 16, 8, 8),
-              child: Text(
-                note.group.name,
-                style: Theme.of(context).textTheme.titleSmall,
-              ),
-            ),
-            itemComparator: (element1, element2) {
-              return element1.group.order.compareTo(element2.group.order);
-            },
-            itemBuilder: (context, note) => NoteListItemView(
-              note: note,
-              onItemSelected: widget._onNoteItemSelected,
-            ),
-          ),
-        );
         return Scaffold(
-          body: CustomScrollView(
-            slivers: [
-              SliverAppBar.large(
-                title: Text(widget.title),
-              ),
-              noteListContent,
-            ],
-          ),
+          body: _buildGroupList(state, context),
           floatingActionButton: FloatingActionButton(
             onPressed: widget._onNewNoteButtonPressed,
             heroTag: 'compose-button',
@@ -103,6 +71,69 @@ class _NoteListViewState extends State<NoteListView> {
         );
       },
       listener: (context, state) => {},
+    );
+  }
+
+  _buildGroupList(NoteListState state, BuildContext context) {
+    final notes = state.noteList;
+    final paddingBottom = MediaQuery.of(context).padding.bottom;
+    return CustomScrollView(
+      slivers: [
+        SliverAppBar.large(
+          title: Text(widget.title),
+        ),
+        notes.isNotEmpty
+            ? SliverPadding(
+                padding: EdgeInsets.fromLTRB(20, 0, 20, paddingBottom),
+                sliver: SliverGroupedListView(
+                  elements: notes,
+                  groupBy: (note) => note.group.order,
+                  groupHeaderBuilder: (note) => Padding(
+                    padding: const EdgeInsets.fromLTRB(8, 16, 8, 8),
+                    child: Text(
+                      note.group.name,
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
+                  ),
+                  itemComparator: (element1, element2) {
+                    return element1.group.order.compareTo(element2.group.order);
+                  },
+                  itemBuilder: (context, note) => NoteListItemView(
+                    note: note,
+                    onItemSelected: widget._onNoteItemSelected,
+                  ),
+                ),
+              )
+            : _buildEmptyContent(),
+      ],
+    );
+  }
+
+  _buildEmptyContent() {
+    return SliverFillRemaining(
+      hasScrollBody: false,
+      child: Container(
+        alignment: Alignment.center,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.note_outlined,
+              size: 96,
+              color: Theme.of(context).colorScheme.outlineVariant,
+            ),
+            Text(
+              "Folder is Empty",
+              style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                    color: Theme.of(context).colorScheme.outlineVariant,
+                  ),
+            ),
+            const SizedBox(
+              height: kToolbarHeight + kFloatingActionButtonMargin,
+            )
+          ],
+        ),
+      ),
     );
   }
 }

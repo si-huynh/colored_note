@@ -1,3 +1,8 @@
 {
-    "createNewFolder": "Create New Folder"
+    "create_new_folder": "Create New Folder",
+    "folders": "Folders",
+    "dialog_cancel_button": "Cancel",
+    "dialog_submit_button": "Submit",
+    "dialog_delete_folder_message": "Are you sure you wish to delete this folder?",
+    "dialog_delete_folder_title": "Confirm"
 }

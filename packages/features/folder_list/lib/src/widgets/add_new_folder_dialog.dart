@@ -34,7 +34,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:folder_list/src/folder_cubit.dart';
 import 'package:folder_list/src/l10n/folder_list_localizations.dart';
 
-enum ActionDialogButton { done, cancel }
+enum ActionDialogButton { submit, cancel }
 
 class AddNewFolderButton extends StatefulWidget {
   const AddNewFolderButton({super.key});
@@ -56,7 +56,7 @@ class _AddNewFolderButtonState extends State<AddNewFolderButton> {
 
   _onNewFolderButtonPress() {
     addNewFolderdialog(context).then((value) {
-      if (value != null && value == ActionDialogButton.done && _folderNameValueText.isNotEmpty) {
+      if (value != null && value == ActionDialogButton.submit && _folderNameValueText.isNotEmpty) {
         final cubit = context.read<FolderListCubit>();
         cubit.createNewFolder(_folderNameValueText);
       }
@@ -69,7 +69,7 @@ class _AddNewFolderButtonState extends State<AddNewFolderButton> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text(l10n.createNewFolder),
+            title: Text(l10n.create_new_folder),
             content: TextField(
               onChanged: (value) {
                 setState(() {
@@ -80,15 +80,15 @@ class _AddNewFolderButtonState extends State<AddNewFolderButton> {
             actions: [
               MaterialButton(
                 onPressed: () {
-                  Navigator.pop(context, ActionDialogButton.done);
+                  Navigator.pop(context, ActionDialogButton.submit);
                 },
-                child: const Text('Done'),
+                child: Text(l10n.dialog_submit_button),
               ),
               MaterialButton(
                 onPressed: () {
                   Navigator.pop(context, ActionDialogButton.cancel);
                 },
-                child: const Text('Cancle'),
+                child: Text(l10n.dialog_cancel_button),
               ),
             ],
           );

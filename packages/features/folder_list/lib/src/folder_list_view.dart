@@ -35,6 +35,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:folder_list/src/folder_cubit.dart';
 import 'package:folder_list/src/folder_list_state.dart';
+import 'package:folder_list/src/l10n/folder_list_localizations.dart';
 import 'package:folder_list/src/widgets/add_new_folder_dialog.dart';
 import 'package:folder_list/src/widgets/folder_list_item_view.dart';
 
@@ -62,7 +63,7 @@ class FolderListView extends StatelessWidget {
             slivers: [
               SliverAppBar.large(
                 leading: const AddNewFolderButton(),
-                title: const Text('Folders'),
+                title: Text(FolderListLocalizations.of(context).folders),
               ),
               SliverPadding(
                 padding: const EdgeInsets.all(20),

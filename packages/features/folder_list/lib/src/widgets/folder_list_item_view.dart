@@ -32,6 +32,7 @@
 import 'package:domain_models/domain_models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:folder_list/folder_list.dart';
 import 'package:folder_list/src/folder_cubit.dart';
 
 class FolderListItemView extends StatelessWidget {
@@ -88,18 +89,21 @@ class FolderListItemView extends StatelessWidget {
   }
 
   Future<bool> _confirmDimiss(BuildContext context) async {
+    final l10n = FolderListLocalizations.of(context);
     return await showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text("Confirm"),
-          content: const Text("Are you sure you wish to delete this folder?"),
+          title: Text(l10n.dialog_delete_folder_title),
+          content: Text(l10n.dialog_delete_folder_message),
           actions: <Widget>[
             MaterialButton(
-                onPressed: () => Navigator.of(context).pop(true), child: const Text("DELETE")),
+              onPressed: () => Navigator.of(context).pop(true),
+              child: Text(l10n.dialog_submit_button),
+            ),
             MaterialButton(
               onPressed: () => Navigator.of(context).pop(false),
-              child: const Text("CANCEL"),
+              child: Text(l10n.dialog_cancel_button),
             ),
           ],
         );
