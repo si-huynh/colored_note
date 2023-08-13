@@ -91,11 +91,11 @@ abstract class FolderListLocalizations {
     Locale('en')
   ];
 
-  /// No description provided for @create_new_folder.
+  /// No description provided for @createNewFolder.
   ///
   /// In en, this message translates to:
   /// **'Create New Folder'**
-  String get create_new_folder;
+  String get createNewFolder;
 
   /// No description provided for @folders.
   ///
@@ -103,29 +103,29 @@ abstract class FolderListLocalizations {
   /// **'Folders'**
   String get folders;
 
-  /// No description provided for @dialog_cancel_button.
+  /// No description provided for @dialogCancelButton.
   ///
   /// In en, this message translates to:
   /// **'Cancel'**
-  String get dialog_cancel_button;
+  String get dialogCancelButton;
 
-  /// No description provided for @dialog_submit_button.
+  /// No description provided for @dialogSubmitButton.
   ///
   /// In en, this message translates to:
   /// **'Submit'**
-  String get dialog_submit_button;
+  String get dialogSubmitButton;
 
-  /// No description provided for @dialog_delete_folder_message.
+  /// No description provided for @dialogDeleteFolderMessage.
   ///
   /// In en, this message translates to:
   /// **'Are you sure you wish to delete this folder?'**
-  String get dialog_delete_folder_message;
+  String get dialogDeleteFolderMessage;
 
-  /// No description provided for @dialog_delete_folder_title.
+  /// No description provided for @dialogDeleteFolderTitle.
   ///
   /// In en, this message translates to:
   /// **'Confirm'**
-  String get dialog_delete_folder_title;
+  String get dialogDeleteFolderTitle;
 }
 
 class _FolderListLocalizationsDelegate extends LocalizationsDelegate<FolderListLocalizations> {

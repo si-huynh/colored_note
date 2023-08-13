@@ -94,16 +94,16 @@ class FolderListItemView extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(l10n.dialog_delete_folder_title),
-          content: Text(l10n.dialog_delete_folder_message),
+          title: Text(l10n.dialogDeleteFolderTitle),
+          content: Text(l10n.dialogDeleteFolderMessage),
           actions: <Widget>[
             MaterialButton(
-              onPressed: () => Navigator.of(context).pop(true),
-              child: Text(l10n.dialog_submit_button),
+              onPressed: () => Navigator.of(context).pop(false),
+              child: Text(l10n.dialogCancelButton),
             ),
             MaterialButton(
-              onPressed: () => Navigator.of(context).pop(false),
-              child: Text(l10n.dialog_cancel_button),
+              onPressed: () => Navigator.of(context).pop(true),
+              child: Text(l10n.dialogSubmitButton),
             ),
           ],
         );

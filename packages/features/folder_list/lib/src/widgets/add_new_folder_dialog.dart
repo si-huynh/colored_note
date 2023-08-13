@@ -69,7 +69,7 @@ class _AddNewFolderButtonState extends State<AddNewFolderButton> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text(l10n.create_new_folder),
+            title: Text(l10n.createNewFolder),
             content: TextField(
               onChanged: (value) {
                 setState(() {
@@ -80,15 +80,15 @@ class _AddNewFolderButtonState extends State<AddNewFolderButton> {
             actions: [
               MaterialButton(
                 onPressed: () {
-                  Navigator.pop(context, ActionDialogButton.submit);
+                  Navigator.pop(context, ActionDialogButton.cancel);
                 },
-                child: Text(l10n.dialog_submit_button),
+                child: Text(l10n.dialogCancelButton),
               ),
               MaterialButton(
                 onPressed: () {
-                  Navigator.pop(context, ActionDialogButton.cancel);
+                  Navigator.pop(context, ActionDialogButton.submit);
                 },
-                child: Text(l10n.dialog_cancel_button),
+                child: Text(l10n.dialogSubmitButton),
               ),
             ],
           );

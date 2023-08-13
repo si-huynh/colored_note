@@ -124,7 +124,7 @@ class _NoteListViewState extends State<NoteListView> {
               color: Theme.of(context).colorScheme.outlineVariant,
             ),
             Text(
-              NoteListLocalizations.of(context).folder_is_empty,
+              NoteListLocalizations.of(context).folderIsEmpty,
               style: Theme.of(context).textTheme.titleSmall?.copyWith(
                     color: Theme.of(context).colorScheme.outlineVariant,
                   ),

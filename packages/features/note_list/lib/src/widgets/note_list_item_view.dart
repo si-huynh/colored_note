@@ -97,16 +97,16 @@ class NoteListItemView extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(l10n.dialog_delete_note_title),
-          content: Text(l10n.dialog_delete_note_message),
+          title: Text(l10n.dialogDeleteNoteTitle),
+          content: Text(l10n.dialogDeleteNoteMessage),
           actions: <Widget>[
             MaterialButton(
-              onPressed: () => Navigator.of(context).pop(true),
-              child: Text(l10n.dialog_submit_button),
+              onPressed: () => Navigator.of(context).pop(false),
+              child: Text(l10n.dialogCancelButton),
             ),
             MaterialButton(
-              onPressed: () => Navigator.of(context).pop(false),
-              child: Text(l10n.dialog_cancel_button),
+              onPressed: () => Navigator.of(context).pop(true),
+              child: Text(l10n.dialogSubmitButton),
             ),
           ],
         );

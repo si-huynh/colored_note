@@ -91,53 +91,35 @@ abstract class NoteListLocalizations {
     Locale('en')
   ];
 
-  /// No description provided for @folder_is_empty.
+  /// No description provided for @folderIsEmpty.
   ///
   /// In en, this message translates to:
   /// **'Folder is empty'**
-  String get folder_is_empty;
+  String get folderIsEmpty;
 
-  /// No description provided for @dialog_cancel_button.
+  /// No description provided for @dialogCancelButton.
   ///
   /// In en, this message translates to:
   /// **'Cancel'**
-  String get dialog_cancel_button;
+  String get dialogCancelButton;
 
-  /// No description provided for @dialog_submit_button.
+  /// No description provided for @dialogSubmitButton.
   ///
   /// In en, this message translates to:
   /// **'Submit'**
-  String get dialog_submit_button;
+  String get dialogSubmitButton;
 
-  /// No description provided for @dialog_delete_note_message.
+  /// No description provided for @dialogDeleteNoteMessage.
   ///
   /// In en, this message translates to:
   /// **'Are you sure you wish to delete this note?'**
-  String get dialog_delete_note_message;
+  String get dialogDeleteNoteMessage;
 
-  /// No description provided for @dialog_delete_note_title.
+  /// No description provided for @dialogDeleteNoteTitle.
   ///
   /// In en, this message translates to:
   /// **'Confirm'**
-  String get dialog_delete_note_title;
-
-  /// No description provided for @group_today.
-  ///
-  /// In en, this message translates to:
-  /// **'Today'**
-  String get group_today;
-
-  /// No description provided for @group_yesterday.
-  ///
-  /// In en, this message translates to:
-  /// **'Yesterday'**
-  String get group_yesterday;
-
-  /// No description provided for @group_this_month.
-  ///
-  /// In en, this message translates to:
-  /// **'This Month'**
-  String get group_this_month;
+  String get dialogDeleteNoteTitle;
 }
 
 class _NoteListLocalizationsDelegate extends LocalizationsDelegate<NoteListLocalizations> {
