@@ -76,6 +76,7 @@ class _AddNewFolderButtonState extends State<AddNewFolderButton> {
                   _folderNameValueText = value;
                 });
               },
+              autofocus: true,
             ),
             actions: [
               MaterialButton(
