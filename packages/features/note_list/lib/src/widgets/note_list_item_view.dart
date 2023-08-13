@@ -51,7 +51,7 @@ class NoteListItemView extends StatelessWidget {
   Widget build(BuildContext context) {
     var formatTime = DateFormat.yMMMd().format(note.time);
     final group = note.group.name;
-    if (group == NoteGroup.today.name || group == NoteGroup.yesterday.value) {
+    if (group == NoteGroup.today.value || group == NoteGroup.yesterday.value) {
       formatTime = DateFormat.Hm().format(note.time);
     } else {
       formatTime = DateFormat('EEEE dd').format(note.time);

@@ -87,33 +87,37 @@ class _NoteComposeViewState extends State<NoteComposeView> {
             child: QuillEditor.basic(
               controller: _quillController!,
               readOnly: false,
+              autoFocus: false,
             ),
           ),
         ),
-        QuillToolbar.basic(
-          controller: _quillController!,
-          showFontFamily: false,
-          showCodeBlock: false,
-          showAlignmentButtons: false,
-          showCenterAlignment: false,
-          showQuote: false,
-          showLink: false,
-          showListBullets: false,
-          showUndo: false,
-          showRedo: false,
-          showDividers: false,
-          showInlineCode: false,
-          showIndent: false,
-          showSubscript: false,
-          showSuperscript: false,
-          showListCheck: false,
-          showSearchButton: false,
-          showDirection: false,
-          showListNumbers: false,
-          showBackgroundColorButton: false,
-          showSmallButton: false,
-          showHeaderStyle: true,
-          showClearFormat: true,
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: QuillToolbar.basic(
+            controller: _quillController!,
+            showFontFamily: false,
+            showCodeBlock: false,
+            showAlignmentButtons: false,
+            showCenterAlignment: false,
+            showQuote: false,
+            showLink: false,
+            showListBullets: false,
+            showUndo: false,
+            showRedo: false,
+            showDividers: false,
+            showInlineCode: false,
+            showIndent: false,
+            showSubscript: false,
+            showSuperscript: false,
+            showListCheck: false,
+            showSearchButton: false,
+            showDirection: false,
+            showListNumbers: false,
+            showBackgroundColorButton: false,
+            showSmallButton: false,
+            showHeaderStyle: true,
+            showClearFormat: true,
+          ),
         ),
       ],
     );
@@ -149,7 +153,6 @@ class _NoteComposeViewState extends State<NoteComposeView> {
   }
 
   Future<bool> _onWillPop() async {
-    // Navigator.of(context).pop(widget.noteID);
     final delta = _quillController!.document.toDelta();
     await _performSaveChanges(DocChange(delta, delta, ChangeSource.LOCAL));
     return true;
