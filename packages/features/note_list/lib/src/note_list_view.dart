@@ -33,6 +33,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grouped_list/sliver_grouped_list.dart';
+import 'package:note_list/src/l10n/note_list_localizations.dart';
 import 'package:note_list/src/note_list_cubit.dart';
 import 'package:note_list/src/note_list_state.dart';
 import 'package:note_list/src/widgets/note_list_item_view.dart';
@@ -123,7 +124,7 @@ class _NoteListViewState extends State<NoteListView> {
               color: Theme.of(context).colorScheme.outlineVariant,
             ),
             Text(
-              "Folder is Empty",
+              NoteListLocalizations.of(context).folder_is_empty,
               style: Theme.of(context).textTheme.titleSmall?.copyWith(
                     color: Theme.of(context).colorScheme.outlineVariant,
                   ),

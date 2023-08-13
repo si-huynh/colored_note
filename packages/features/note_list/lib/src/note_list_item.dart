@@ -33,6 +33,16 @@
 import 'package:domain_models/domain_models.dart';
 import 'package:intl/intl.dart';
 
+enum NoteGroup {
+  today('Today'),
+  yesterday('Yesterday'),
+  thisMonth('This Month');
+
+  const NoteGroup(this.value);
+
+  final String value;
+}
+
 class NoteListItemGroup {
   final String name;
   final int order;
@@ -58,9 +68,9 @@ class NoteListItem implements Comparable<NoteListItem> {
   NoteListItemGroup _createGroupByTime(DateTime time) {
     final today = DateTime.now();
     final diff = today.difference(time);
-    if (diff.inHours < 24) return NoteListItemGroup('Today', 0);
-    if (diff.inDays == 1) return NoteListItemGroup('Yesterday', 1);
-    if (time.month == today.month) return NoteListItemGroup('This Month', 2);
+    if (diff.inHours < 24) return NoteListItemGroup(NoteGroup.today.value, 0);
+    if (diff.inDays == 1) return NoteListItemGroup(NoteGroup.yesterday.value, 1);
+    if (time.month == today.month) return NoteListItemGroup(NoteGroup.thisMonth.value, 2);
     if (time.year == today.year) {
       int diffMonth = today.month - time.month - 1;
       return NoteListItemGroup(DateFormat.MMMM().format(time), 3 + diffMonth);

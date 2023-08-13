@@ -30,3 +30,4 @@
  *  THE SOFTWARE.
  */
 export 'src/note_list_screen.dart';
+export 'src/l10n/note_list_localizations.dart';

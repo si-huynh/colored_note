@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:folder_list/folder_list.dart';
 import 'package:folder_repository/folder_repository.dart';
 import 'package:key_value_storage/key_value_storage.dart';
+import 'package:note_list/note_list.dart';
 import 'package:note_repository/note_repository.dart';
 import 'package:routemaster/routemaster.dart';
 
@@ -50,6 +51,7 @@ class _ColoredNoteAppState extends State<ColoredNoteApp> {
       ],
       localizationsDelegates: const [
         FolderListLocalizations.delegate,
+        NoteListLocalizations.delegate,
       ],
     );
   }

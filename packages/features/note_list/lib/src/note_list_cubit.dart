@@ -48,9 +48,7 @@ class NoteListCubit extends Cubit<NoteListState> {
 
   Future<void> fetchNoteList() async {
     try {
-      log('Peform fetching notes...');
       final noteList = await noteRepository.getAllNotes(folder);
-      log('done. We have ${noteList.length} notes in $folder folder');
       final noteListItem = noteList.map((e) => NoteListItem.fromDomainModel(e)).toList();
       emit(NoteListState(noteList: noteListItem));
     } catch (error) {

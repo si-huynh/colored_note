@@ -29,11 +29,13 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
  */
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:note_list/note_list.dart';
 import 'package:note_list/src/note_list_cubit.dart';
-import 'package:note_list/src/note_list_item.dart';
+import 'package:note_list/src/note_list_item.dart' show NoteListItem, NoteGroup;
 
 class NoteListItemView extends StatelessWidget {
   const NoteListItemView({
@@ -48,7 +50,8 @@ class NoteListItemView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var formatTime = DateFormat.yMMMd().format(note.time);
-    if (note.group.name == 'Today' || note.group.name == 'Yesterday') {
+    final group = note.group.name;
+    if (group == NoteGroup.today.name || group == NoteGroup.yesterday.value) {
       formatTime = DateFormat.Hm().format(note.time);
     } else {
       formatTime = DateFormat('EEEE dd').format(note.time);
@@ -89,20 +92,21 @@ class NoteListItemView extends StatelessWidget {
   }
 
   Future<bool> _confirmDimiss(BuildContext context) async {
+    final l10n = NoteListLocalizations.of(context);
     return await showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text("Confirm"),
-          content: const Text("Are you sure you wish to delete this note?"),
+          title: Text(l10n.dialog_delete_note_title),
+          content: Text(l10n.dialog_delete_note_message),
           actions: <Widget>[
             MaterialButton(
               onPressed: () => Navigator.of(context).pop(true),
-              child: const Text("Delete"),
+              child: Text(l10n.dialog_submit_button),
             ),
             MaterialButton(
               onPressed: () => Navigator.of(context).pop(false),
-              child: const Text("Cancel"),
+              child: Text(l10n.dialog_cancel_button),
             ),
           ],
         );
