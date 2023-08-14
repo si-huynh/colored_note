@@ -5,11 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:folder_list/folder_list.dart';
 import 'package:folder_repository/folder_repository.dart';
 import 'package:key_value_storage/key_value_storage.dart';
+import 'package:macos_window_utils/window_manipulator.dart';
 import 'package:note_list/note_list.dart';
 import 'package:note_repository/note_repository.dart';
 import 'package:routemaster/routemaster.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await WindowManipulator.initialize();
+  await WindowManipulator.hideTitle();
   runApp(const ColoredNoteApp());
 }
 
