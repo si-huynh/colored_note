@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:colored_note/color_schemes.dart';
 import 'package:colored_note/routing_table.dart';
 import 'package:colored_note/screen_view_observer.dart';
@@ -11,9 +13,11 @@ import 'package:note_repository/note_repository.dart';
 import 'package:routemaster/routemaster.dart';
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await WindowManipulator.initialize();
-  await WindowManipulator.hideTitle();
+  if (Platform.isMacOS) {
+    WidgetsFlutterBinding.ensureInitialized();
+    await WindowManipulator.initialize();
+    await WindowManipulator.hideTitle();
+  }
   runApp(const ColoredNoteApp());
 }
 

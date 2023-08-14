@@ -31,6 +31,7 @@
  */
 
 import 'package:domain_models/domain_models.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 enum NoteGroup {
@@ -68,7 +69,7 @@ class NoteListItem implements Comparable<NoteListItem> {
   NoteListItemGroup _createGroupByTime(DateTime time) {
     final today = DateTime.now();
     final diff = today.difference(time);
-    if (diff.inHours < 24) return NoteListItemGroup(NoteGroup.today.value, 0);
+    if (DateUtils.isSameDay(time, today)) return NoteListItemGroup(NoteGroup.today.value, 0);
     if (diff.inDays == 1) return NoteListItemGroup(NoteGroup.yesterday.value, 1);
     if (time.month == today.month) return NoteListItemGroup(NoteGroup.thisMonth.value, 2);
     if (time.year == today.year) {

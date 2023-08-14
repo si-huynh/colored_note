@@ -4,12 +4,22 @@ An easy way to take notes, create to-do lists, capture ideas, and more. Open it,
 
 ## [Features](#features)
 
+Main:
+
 -   [x] User create a note
 -   [x] User can create a folder to contain notes
 -   [x] Saving a note automatically
 -   [ ] Sync note to cloud
 -   [ ] Add support for images in notes
 -   [ ] Add the ability to search notes
+
+Others:
+
+-   [ ] Writing unit tests
+-   [ ] Support Sidebar layout on desktop apps
+-   [ ] Searching notes
+-   [ ] Creating a colored tag for note
+-   [ ] Pin note
 
 ## [Getting Started](#getting-started)
 
