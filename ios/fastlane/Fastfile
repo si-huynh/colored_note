@@ -47,9 +47,9 @@ platform :ios do
       type: "appstore",
       keychain_name: KEYCHAIN_NAME,
       keychain_password: KEYCHAIN_PASSWORD,
-      git_url: MATCH_GIT_URL,
-      git_basic_authorization: MATCH_GIT_AUTHORIZATION,
-      username: FASTLANE_USER,
+      git_url: ENV["MATCH_GIT_URL"],
+      git_basic_authorization: ENV["MATCH_GIT_AUTHORIZATION"],
+      username: ENV["FASTLANE_USER"],
       readonly: true
     )
   end
