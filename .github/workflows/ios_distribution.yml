@@ -1,0 +1,74 @@
+name: Build iOS
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: choice
+        required: true
+        description: "Environment"
+        options:
+          - dev
+          - prod
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.19.3
+          architecture: arm64
+          cache: true
+
+      - run: flutter --version
+
+      - name: Install Flutter dependencies
+        run: make get
+
+      - name: Build Runner
+        run: make build-runner
+
+      - name: Analyze files
+        run: make lint
+
+      - name: Check format files exclude generate files
+        run: make format
+
+      - name: Initializing fastlane
+        working-directory: ios
+        run: |
+          bundle install
+          bundle update fastlane
+          bundle exec fastlane update_plugins
+      - name: Read Changelog
+        id: changelog
+        uses: juliangruber/read-file-action@v1
+        with:
+          path: ./metadata/changelog.txt
+      - name: Deploy build to TestFlight via Fastlane
+        uses: maierj/fastlane-action@v3.1.0
+        with:
+          lane: deploy
+          subdirectory: ios
+        env:
+          FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: "${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}"
+          FASTLANE_USER: "${{ secrets.FASTLANE_USER }}"
+          MATCH_PASSWORD: "${{ secrets.MATCH_PASSWORD }}"
+          MATCH_GIT_URL: "${{ secrets.MATCH_GIT_URL }}"
+          MATCH_GIT_AUTHORIZATION: "${{ secrets.MATCH_GIT_AUTHORIZATION }}"
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          ASC_KEY: ${{ secrets.ASC_KEY }}
+          CHANGELOG: "${{ steps.changelog.outputs.content }}"
+      - name: Upload app-store ipa and dsyms to artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-store ipa & dsyms
+          path: |
+            ${{ github.workspace }}/build/ios/ipa/colored_note.ipa
+            ${{ github.workspace }}/*.app.dSYM.zip
