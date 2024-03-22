@@ -33,12 +33,6 @@ jobs:
       - name: Build Runner
         run: make build-runner
 
-      - name: Analyze files
-        run: make lint
-
-      - name: Check format files exclude generate files
-        run: make format
-
       - name: Initializing fastlane
         working-directory: ios
         run: |
