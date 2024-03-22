@@ -50,17 +50,17 @@ class NoteComposeView extends StatefulWidget {
 }
 
 class _NoteComposeViewState extends State<NoteComposeView> {
-  QuillController? _quillController;
+  QuillController _quillController = QuillController.basic();
 
   bool _isEditted = false;
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: _onWillPop,
+    return PopScope(
+      onPopInvoked: _onPopInvoked,
       child: BlocConsumer<NoteComposeCubit, NoteComposeState>(
         builder: (context, state) {
-          if (state is NoteComposeLoaded && _quillController != null) {
+          if (state is NoteComposeLoaded) {
             return SafeArea(
               child: _buildEditorAndToolBar(),
             );
@@ -85,16 +85,19 @@ class _NoteComposeViewState extends State<NoteComposeView> {
           child: Container(
             padding: const EdgeInsets.all(16),
             child: QuillEditor.basic(
-              controller: _quillController!,
-              readOnly: false,
-              autoFocus: false,
+              configurations: QuillEditorConfigurations(
+                controller: _quillController,
+                readOnly: false,
+                autoFocus: false,
+              ),
             ),
           ),
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: QuillToolbar.basic(
-            controller: _quillController!,
+          child: QuillToolbar.simple(
+              configurations: QuillSimpleToolbarConfigurations(
+            controller: _quillController,
             showFontFamily: false,
             showCodeBlock: false,
             showAlignmentButtons: false,
@@ -117,7 +120,7 @@ class _NoteComposeViewState extends State<NoteComposeView> {
             showSmallButton: false,
             showHeaderStyle: true,
             showClearFormat: true,
-          ),
+          )),
         ),
       ],
     );
@@ -125,15 +128,18 @@ class _NoteComposeViewState extends State<NoteComposeView> {
 
   _loadNoteContent(List<dynamic> content) async {
     final template = await rootBundle.loadString('assets/note_template.json');
-    final document =
-        content.isEmpty ? Document.fromJson(jsonDecode(template)) : Document.fromJson(content);
+    final document = content.isEmpty
+        ? Document.fromJson(jsonDecode(template))
+        : Document.fromJson(content);
     setState(() {
       _quillController = QuillController(
         document: document,
         selection: const TextSelection.collapsed(offset: 0),
       );
 
-      _quillController!.changes.debounceTime(const Duration(milliseconds: 1000)).listen((e) {
+      _quillController.changes
+          .debounceTime(const Duration(milliseconds: 1000))
+          .listen((e) {
         if (_isEditted == false) {
           setState(() {
             _isEditted = true;
@@ -145,16 +151,16 @@ class _NoteComposeViewState extends State<NoteComposeView> {
   }
 
   _performSaveChanges(DocChange e) async {
-    if (e.source == ChangeSource.LOCAL) {
+    if (e.source == ChangeSource.local) {
       final cubit = context.read<NoteComposeCubit>();
-      final content = _quillController!.document.toDelta().toJson();
+      final content = _quillController.document.toDelta().toJson();
       await cubit.saveChanges(content, changed: _isEditted);
     }
   }
 
-  Future<bool> _onWillPop() async {
-    final delta = _quillController!.document.toDelta();
-    await _performSaveChanges(DocChange(delta, delta, ChangeSource.LOCAL));
+  Future<bool> _onPopInvoked(bool value) async {
+    final delta = _quillController.document.toDelta();
+    await _performSaveChanges(DocChange(delta, delta, ChangeSource.local));
     return true;
   }
 }

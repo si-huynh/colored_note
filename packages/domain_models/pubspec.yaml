@@ -1,22 +1,22 @@
 name: domain_models
 description: A new Flutter package project.
 version: 0.0.1
-homepage: null
+publish_to: none
 
 environment:
-    sdk: ">=3.0.6 <4.0.0"
-    flutter: ">=1.17.0"
+  sdk: ">=3.2.6 <4.0.0"
+  flutter: ">=1.17.0"
 
 dependencies:
-    equatable: ^2.0.5
-    flutter:
-        sdk: flutter
-    uuid: ^3.0.7
+  equatable: ^2.0.5
+  flutter:
+    sdk: flutter
+  uuid: ^4.3.3
 
 dev_dependencies:
-    flutter_lints: ^2.0.0
-    flutter_test:
-        sdk: flutter
+  flutter_lints: ^3.0.1
+  flutter_test:
+    sdk: flutter
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

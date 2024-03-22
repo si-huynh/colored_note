@@ -1,38 +1,39 @@
 name: colored_note
 description: An easy way to take notes, create to-do lists, capture ideas, and
-    more. Open it, jot down some thoughts, and you're done.
+  more. Open it, jot down some thoughts, and you're done.
 publish_to: "none"
 version: 0.1.0
 
 environment:
-    sdk: ">=3.0.6 <4.0.0"
+  sdk: ">=3.2.6 <4.0.0"
 
 dependencies:
-    flutter:
-        sdk: flutter
-    flutter_localizations:
-        sdk: flutter
-    folder_list:
-        path: packages/features/folder_list
-    folder_repository:
-        path: packages/folder_repository
-    key_value_storage:
-        path: packages/key_value_storage
-    macos_window_utils: ^1.2.0
-    note_compose:
-        path: packages/features/note_compose
-    note_list:
-        path: packages/features/note_list
-    note_repository:
-        path: packages/note_repository
-    routemaster: ^1.0.1
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  folder_list:
+    path: packages/features/folder_list
+  folder_repository:
+    path: packages/folder_repository
+  key_value_storage:
+    path: packages/key_value_storage
+  macos_window_utils: ^1.2.0
+  note_compose:
+    path: packages/features/note_compose
+  note_list:
+    path: packages/features/note_list
+  note_repository:
+    path: packages/note_repository
+  routemaster: ^1.0.1
 
 dev_dependencies:
-    flutter_lints: ^2.0.0
-    flutter_test:
-        sdk: flutter
+  flutter_lints: ^2.0.0
+  flutter_test:
+    sdk: flutter
+  melos: ^5.2.1
 
 flutter:
-    uses-material-design: true
-    assets:
-        - assets/note_template.json
+  uses-material-design: true
+  assets:
+    - assets/note_template.json
