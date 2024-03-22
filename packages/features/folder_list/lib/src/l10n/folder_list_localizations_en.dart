@@ -2,7 +2,7 @@ import 'folder_list_localizations.dart';
 
 /// The translations for English (`en`).
 class FolderListLocalizationsEn extends FolderListLocalizations {
-  FolderListLocalizationsEn([String locale = 'en']) : super(locale);
+  FolderListLocalizationsEn([super.locale = 'en']);
 
   @override
   String get createNewFolder => 'Create New Folder';
@@ -17,7 +17,8 @@ class FolderListLocalizationsEn extends FolderListLocalizations {
   String get dialogSubmitButton => 'Submit';
 
   @override
-  String get dialogDeleteFolderMessage => 'Are you sure you wish to delete this folder?';
+  String get dialogDeleteFolderMessage =>
+      'Are you sure you wish to delete this folder?';
 
   @override
   String get dialogDeleteFolderTitle => 'Confirm';
