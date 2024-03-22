@@ -77,7 +77,7 @@ platform :ios do
   end
 
   desc "Push a new beta build to TestFlight"
-  lane :beta do
+  lane :deploy do
     increment_build_number(xcodeproj: "Runner.xcodeproj")
     prepare_signing
     build_and_submit
