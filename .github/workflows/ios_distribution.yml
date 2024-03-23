@@ -3,6 +3,14 @@ name: Build iOS
 on:
   workflow_dispatch:
     inputs:
+      deploy_version:
+        description: "Enter deploy version"
+        required: true
+        type: string
+      deploy_build_number:
+        description: "Enter deploy build number"
+        required: true
+        type: string
       environment:
         type: choice
         required: true
@@ -39,11 +47,13 @@ jobs:
           bundle install
           bundle update fastlane
           bundle exec fastlane update_plugins
+
       - name: Read Changelog
         id: changelog
         uses: juliangruber/read-file-action@v1
         with:
           path: ./metadata/changelog.txt
+
       - name: Deploy build to TestFlight via Fastlane
         uses: maierj/fastlane-action@v3.1.0
         with:
@@ -58,7 +68,10 @@ jobs:
           ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
           ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
           ASC_KEY: ${{ secrets.ASC_KEY }}
+          APP_BUILD_NAME: "${{ github.event.inputs.deploy_version }}"
+          APP_BUILD_NUMBER: "${{ github.event.inputs.deploy_build_number }}"
           CHANGELOG: "${{ steps.changelog.outputs.content }}"
+
       - name: Upload app-store ipa and dsyms to artifacts
         uses: actions/upload-artifact@v4
         with:
