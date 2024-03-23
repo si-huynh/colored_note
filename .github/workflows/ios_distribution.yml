@@ -59,6 +59,8 @@ jobs:
           subdirectory: ios
         env:
           FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: "${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}"
+          FASTLANE_USER: "${{ secrets.FASTLANE_USER }}"
+          FASTLANE_PASSWORD: "${{ secrets.FASTLANE_PASSWORD }}"
           MATCH_PASSWORD: "${{ secrets.MATCH_PASSWORD }}"
           MATCH_GIT_URL: "${{ secrets.MATCH_GIT_URL }}"
           MATCH_GIT_AUTHORIZATION: "${{ secrets.MATCH_GIT_AUTHORIZATION }}"
