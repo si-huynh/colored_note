@@ -60,7 +60,9 @@ platform :ios do
     api_key = lane_context[SharedValues::APP_STORE_CONNECT_API_KEY]
 
     sh(
-      "cd ../.. && flutter build ipa -t lib/main.dart --release \
+      "cd ../.. && flutter build ipa \
+      --release \
+      --export-options-plist=$PWD/ios/exportOptions.plist \
       --build-number=#{ENV["APP_BUILD_NAME"]} \
       --build-name=#{ENV["APP_BUILD_NUMBER"]}"
     )
