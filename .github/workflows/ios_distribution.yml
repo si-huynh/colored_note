@@ -45,8 +45,6 @@ jobs:
         working-directory: ios
         run: |
           bundle install
-          bundle update fastlane
-          bundle exec fastlane update_plugins
 
       - name: Read Changelog
         id: changelog
